@@ -11,6 +11,7 @@ public class ProductModel
 
     public string Name { get; set; } = string.Empty; //the name of the final product
 
-    [ForeignKey(nameof(UserDetail.ID))]
-    public int UserId { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public int User { get; set; }
+    public UserDetail UserId { get; set; } = null!;
 }

@@ -11,6 +11,8 @@ public class ProductEntity
     [MinLength(2), MaxLength(20)]
     public string Name { get; set; } = string.Empty; // name of the final product
 
-    [ForeignKey(nameof(UserEntity.ID))]
-    public UserEntity ID { get; set; } = null!; //so that users can save their combinations
+    [ForeignKey(nameof(UserId))]
+    public int User { get; set; }
+    public UserEntity UserId { get; set; } = null!; //so that users can save their combinations
+
 }

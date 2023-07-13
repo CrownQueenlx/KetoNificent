@@ -7,8 +7,8 @@ namespace KetoNificent.Data.Entities;
 public class UserEntity : IdentityUser<int>
 {
     [Key]
-    public int ID {get; set; } = new();
-    public override int Id => ID;
+    public int UserId {get; set; } = new();
+    public override int Id => UserId;
     public string? Name { get; set; }
     public DateTime DateCreated { get; set; }
 }
