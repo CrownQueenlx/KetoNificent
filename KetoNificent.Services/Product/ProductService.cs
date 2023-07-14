@@ -48,6 +48,7 @@ public class ProductService : IProductService
     }
 
     // product needs to be seen [Get]
+    // how the product to join into serving
     public async Task<ProductEntity?> GetProductByIdAsync(int ProdId)
     {
         // Find first product with given Id and User matching _userId
@@ -67,7 +68,7 @@ public class ProductService : IProductService
 
     // Delete Product [Delete]
 
-    // how the product to join into serving
+    
 
 
 }
