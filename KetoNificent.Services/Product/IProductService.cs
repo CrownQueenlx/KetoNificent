@@ -5,6 +5,13 @@ namespace KetoNificent.Services.Product;
 
 public interface IProductService
 {
-    Task<ProductModel?> CreateProductAsync(ProductModel request);
+    Task<ProductEntity> CreateProductAsync(ProductModel request);
+    Task<ProductEntity?> GetProductByIdAsync (int ProdId);
+    // Task<bool> JoinProductServingAsync(int id);
+
+
+
+    
+
     
 }

@@ -11,10 +11,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+
+
 builder.Services.AddControllersWithViews();
+
 // Enables using Identity Managers (Users, SignIn, Password)
 builder.Services.AddDefaultIdentity<UserEntity>()
     .AddEntityFrameworkStores<AppDbContext>();
+
 // Configure what happens when a logged out user tries to access an authorized route
 builder.Services.ConfigureApplicationCookie(options =>
 {
