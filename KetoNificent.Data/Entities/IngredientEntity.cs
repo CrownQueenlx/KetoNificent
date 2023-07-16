@@ -18,4 +18,10 @@ public class IngredientEntity
 
     public string Protein { get; set; } = string.Empty;
     public int ProteinCt { get; set; } //number of protein 
+    
+    [Required]
+    public string DefaultMeasurement { get; set; } = string.Empty;
+    
+    [Required]
+    public int DefaultAmount { get; set; }
 }
