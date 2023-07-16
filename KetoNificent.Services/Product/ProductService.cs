@@ -65,10 +65,38 @@ public class ProductService : IProductService
     }
 
     // Update Product Name [Put]
+    public async Task<bool> UpdateProductByIdAsync(ProductModel request)
+    {
+        // using the null conditional operator checks if null and also the User against the _userId
+        var productEntity = await _dbContext.Products.FindAsync(request.Id);
+        if (productEntity?.User != _userId)
+            return false;
+
+        // Now we update the entity's properties
+        productEntity.Name = request.Name;
+        // Save the changes to the database check how many rows updated
+        var numberOfChanges = await _dbContext.SaveChangesAsync();
+        // Save changes to the Database stated to be equal to one because should be only one row updated
+        return numberOfChanges == 1;
+    }
 
     // Delete Product [Delete]
+    public async Task<bool> DeleteProductAsync(int ProdId)
+    {
+        // find by Id
+        var productEntity = await _dbContext.Products.FindAsync(ProdId);
+        
+        // Validate existence and ownership
+        if (productEntity?.User != _userId)
+        return false;
 
+        // remove Product form the DbContext and assert that the one change was saved
+        _dbContext.Products.Remove(productEntity);
+        return await _dbContext.SaveChangesAsync() == 1;
+    }
     
+
+
 
 
 }
