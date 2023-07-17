@@ -12,7 +12,7 @@ public class IngredientService : IIngredientService
     {
         _dbContext = dbContext;
     }
-    public async Task<IngredientEntity> CreateIngredientAsync(IngredientModel request)
+    public async Task<IngredientEntity?> CreateIngredientAsync(IngredientModel request)
     {
         var IngredEntity = new IngredientEntity()
         {
@@ -91,6 +91,10 @@ public class IngredientService : IIngredientService
     {
         // find the Ingredient by the given Id
         var ingredientEntity = await _dbContext.Ingredients.FindAsync(ingredId);
+
+        // validate that the Ingredient exists
+        // if (ingredientEntity == _dbContext.Ingredients)
+
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);
         return false;
