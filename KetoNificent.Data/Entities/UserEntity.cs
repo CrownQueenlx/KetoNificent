@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace KetoNificent.Data.Entities;
@@ -9,6 +8,8 @@ public class UserEntity : IdentityUser<int>
     [Key]
     public int UserId {get; set; } = new();
     public override int Id => UserId;
-    public string? Name { get; set; }
+    // string email is inherited from the Microsoft Identity
+    public string Password { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     public DateTime DateCreated { get; set; }
 }

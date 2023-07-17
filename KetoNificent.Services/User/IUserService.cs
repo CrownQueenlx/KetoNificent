@@ -5,14 +5,14 @@ namespace KetoNificent.Services.User;
 
 public interface IUserService
 {
-    // Post
-    Task<bool> RegisterUserAsync(UserRegister model);
-    // Get
-    Task<UserDetail> GetUserByIdAsync(int userId);
     Task<bool> LoginAsync(UserLogin model);
     Task LogoutAsync();
+    // Post
+    Task<bool> RegisterUserAsync(UserRegister model);
+    // Get methods are private in the UserService
+    
     // Put
-    Task<UserEntity> UpdateUserByIdAsync(int userId);
+    Task<bool> UpdateUserByIdAsync(UserDetail request);
     // Delete
-    Task<bool> DeleteUserAsync();
+    Task<bool> DeleteUserAsync(int id);
 }
