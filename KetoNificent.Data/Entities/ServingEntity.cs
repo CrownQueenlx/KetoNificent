@@ -13,6 +13,9 @@ public class ServingEntity
 
     [Required]
     public int Amount { get; set; } //how many of the measurement
+
+    [ForeignKey(nameof(IngredientEntity.Id))]
+    public IngredientEntity IngredientId { get; set; } = null!;
     
     [ForeignKey(nameof(ProductEntity.Id))]
     public ProductEntity ProductId { get; set; } = null!;

@@ -1,8 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.User;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Services.User;
 
@@ -29,15 +29,15 @@ public class UserService : IUserService
         if (userEntity is null)
             return false;
 
-            // verifies the correct password was given
-            var passwordHasher = new PasswordHasher<UserEntity>();
-            var verifyPasswordResult = passwordHasher.VerifyHashedPassword(userEntity, userEntity.Password, model.Password);
-            if (verifyPasswordResult == PasswordVerificationResult.Failed)
+        // verifies the correct password was given
+        var passwordHasher = new PasswordHasher<UserEntity>();
+        var verifyPasswordResult = passwordHasher.VerifyHashedPassword(userEntity, userEntity.Password, model.Password);
+        if (verifyPasswordResult == PasswordVerificationResult.Failed)
             return false;
 
-            // finally, since user exists and password passes verification, sign in the user
-            await _signInManager.SignInAsync(userEntity, true);
-            return true;
+        // finally, since user exists and password passes verification, sign in the user
+        await _signInManager.SignInAsync(userEntity, true);
+        return true;
     }
 
     public async Task LogoutAsync()
@@ -47,29 +47,29 @@ public class UserService : IUserService
 
     public async Task<bool> RegisterUserAsync(UserRegister model)
     {
-        if (await GetUserByEmailAsync(model.Email) != null || await GetUserByUsernameAsync(model.Username) != null)
+        if (await UserExistsAsync(model.Email, model.Username))
         return false;
-        
+
         UserEntity entity = new()
-        { 
+        {
             Email = model.Email,
             UserName = model.Username,
             DateCreated = DateTime.Now
         };
 
-        var  passwordHasher = new PasswordHasher<UserEntity>();
+        var passwordHasher = new PasswordHasher<UserEntity>();
         entity.Password = passwordHasher.HashPassword(entity, model.Password);
 
         var createResult = await _userManager.CreateAsync(entity);
-        return createResult.Succeeded; 
+        return createResult.Succeeded;
         //abbreviation for the await _context.saveChangesAsync section
     }
 
     public async Task<bool> UpdateUserByIdAsync(UserDetail request)
     {
-       var userEntity = await _context.Users.FindAsync(request.UserId);
-       if (userEntity is null)
-       return false;
+        var userEntity = await _context.Users.FindAsync(request.UserId);
+        if (userEntity is null)
+            return false;
 
         // update entity's properties
         userEntity.Name = request.Name;
@@ -94,5 +94,15 @@ public class UserService : IUserService
     private async Task<UserEntity?> GetUserByUsernameAsync(string username)
     {
         return await _context.Users.FirstOrDefaultAsync(user => user.UserName.ToLower() == username.ToLower());
+    }
+    private async Task<bool> UserExistsAsync(string email, string username)
+    {
+        var normalizedEmail = _userManager.NormalizeEmail(email);
+        var NormalizedUsername = _userManager.NormalizeName(username);
+
+        return await _context.Users.AnyAsync(y =>
+        y.NormalizedEmail == normalizedEmail ||
+        y.NormalizedUserName == NormalizedUsername
+        );
     }
 }
