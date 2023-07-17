@@ -49,10 +49,12 @@ public class ServingService : IServingService
 
     public async Task<bool> UpdateServingByIdAsync(ServingEntity request)
     {
-        var serving = await _context.Servings.FindAsync();
-        if (serving?.Id != _context.Servings.id)
+        var isValid = await _context.Servings.FindAsync();
+        if (request != isValid)
         return false;
-
+        if (request == isValid)
+        return true;
+        var serving = new ServingEntity();
         serving.Measurement = request.Measurement;
         serving.Amount = request.Amount;
         serving.IngredientId = request.IngredientId;
