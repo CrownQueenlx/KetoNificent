@@ -1,6 +1,7 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Ingredient;
+using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Services.Ingredient;
 
@@ -23,7 +24,7 @@ public class IngredientService : IIngredientService
             DefaultMeasurement = request.DefaultMeasurement,
             DefaultAmount = request.DefaultAmount
         };
-        _dbContext.Ingredient.Add(IngredEntity);
+        _dbContext.Ingredients.Add(IngredEntity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
         if (numberOfChanges == 1)
         {
@@ -43,18 +44,55 @@ public class IngredientService : IIngredientService
 
     }
 
-    public Task<IngredientEntity> GetIngredientByIdAsync(int ingredId)
+    public async Task<IngredientModel?> GetIngredientByIdAsync(int ingredId)
     {
-        throw new NotImplementedException();
+        // find the first Ingredient with the given Id
+        var ingredientEntity = await _dbContext.Ingredients
+        .FirstOrDefaultAsync(y => y.Id == ingredId);
+
+        // If ingredId is null -> return null, otherwise 
+        // initialize and return new
+        return ingredientEntity is null ? null : new IngredientModel
+        {
+            Id = ingredientEntity.Id,
+            Name = ingredientEntity.Name,
+            NCarb = ingredientEntity.NCarb,
+            Fat = ingredientEntity.Fat,
+            Protein = ingredientEntity.Protein,
+            DefaultMeasurement = ingredientEntity.DefaultMeasurement,
+            DefaultAmount = ingredientEntity.DefaultAmount
+        };
     }
 
-    public Task<bool> UpdateIngredientByIdAsync(IngredientModel request)
+    public async Task<bool> UpdateIngredientByIdAsync(IngredientModel request)
     {
-        throw new NotImplementedException();
-    }
+        // find the first Ingredient by Id
+        var ingredEntity = await _dbContext.Ingredients.FindAsync(request.Id);
+        //    check if null
+        if (ingredEntity is null)
+        return false;
 
-    public Task<bool> DeleteIngredientByIdAsync(int ingredId)
+        // update entity's properties
+        ingredEntity.Name = request.Name;
+        ingredEntity.NCarb = request.NCarb;
+        ingredEntity.Fat = request.Fat;
+        ingredEntity.Protein = request.Protein;
+        ingredEntity.DefaultMeasurement = request.DefaultMeasurement;
+        ingredEntity.DefaultAmount =request.DefaultAmount;
+
+        // save the changes to the database, capture the number of rows changed
+        var numOfChanges = await _dbContext.SaveChangesAsync();
+
+        // put numOfChanges equal to one to show if only one row was updated
+        return numOfChanges == 1;
+    }
+    
+    public async Task<bool> DeleteIngredientByIdAsync(int ingredId)
     {
-        throw new NotImplementedException();
+        // find the Ingredient by the given Id
+        var ingredientEntity = await _dbContext.Ingredients.FindAsync(ingredId);
+        // remove the ingredient from the dbcontext and assert that one change was saved
+        _dbContext.Ingredients.Remove(ingredientEntity);
+        return false;
     }
 }

@@ -49,11 +49,11 @@ public class ProductService : IProductService
 
     // product needs to be seen [Get]
     // how the product to join into serving
-    public async Task<ProductEntity?> GetProductByIdAsync(int ProdId)
+    public async Task<ProductEntity?> GetProductByIdAsync(int prodId)
     {
         // Find first product with given Id and User matching _userId
         var productEntity = await _dbContext.Products
-            .FirstOrDefaultAsync(y => y.Id == ProdId && y.User == _userId
+            .FirstOrDefaultAsync(y => y.Id == prodId && y.User == _userId
             );
         // If productEntity is null -> return null
         // Otherwise initialize and return new

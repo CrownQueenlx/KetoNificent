@@ -12,7 +12,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, IdentityRole<int>, int
 
     public override DbSet<UserEntity> Users { get; set; } = null!;
     public DbSet<ProductEntity> Products { get; set; } = null!;
-    public DbSet<IngredientEntity> Ingredient { get; set; } = null!;
+    public DbSet<IngredientEntity> Ingredients { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
