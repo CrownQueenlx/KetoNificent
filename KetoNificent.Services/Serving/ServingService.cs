@@ -12,14 +12,16 @@ public class ServingService : IServingService
     public ServingService(AppDbContext context)
     { _context = context; }
 
-    public async Task<ServingEntity?> CreateServingAsync(ServingModel request)
+    public async Task<ServingEntity?> CreateServingAsync(ServingEntity request)
     {
         var entity = new ServingEntity()
         {
             Measurement = request.Measurement,
             Amount = request.Amount,
-            IngredientId = await _context.Find(Ingredient == ServingModel IngredientId),
-            ProductId = new() ServingEntity.ProductId
+            IngredientId = request.IngredientId,
+            // be certain that the builder waits for the IngredientId to be fetched so that it will be connected
+            // IngredientId = await _context.FindAsync(Ingredient.id == ServingEntity.IngredientId),
+            // ProductId = new() ServingEntity.ProductId
         };
         _context.Servings.Add(entity);
         var numOfChanges = await _context.SaveChangesAsync();
@@ -30,8 +32,8 @@ public class ServingService : IServingService
                 Id = request.Id,
                 Measurement = request.Measurement,
                 Amount = request.Amount,
-                IngredientId = await _context.Ingredients.FirstOrDefault(Id),
-                ProductId = await _context.Products.FirstOrDefault(Id),
+                // IngredientId = await _context.Ingredients.FirstOrDefault(Id),
+                // ProductId = await _context.Products.FirstOrDefault(Id),
             };
             return response;
         }
@@ -67,7 +69,7 @@ public class ServingService : IServingService
     {
         var servingEntity = await _context.Servings.FindAsync(servingId);
 
-        if (servingEntity != _context.Servings.id)
+        if (servingEntity is null)
         return false;
 
         _context.Servings.Remove(servingEntity);

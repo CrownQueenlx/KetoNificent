@@ -7,13 +7,13 @@ namespace KetoNificent.Services.Serving;
 public interface IServingService
 {
     // CREATE 
-    Task<ServingModel> CreateServingAsync();
+    Task<ServingEntity> CreateServingAsync(ServingEntity request);
     // READ 
     Task<bool> GetServingByNameAsync();
 
     // UPDATE 
-    Task<ServingEntity> UpdateServingByIdAsync();
+    Task<bool> UpdateServingByIdAsync(ServingEntity request);
 
     // DELETE
-    Task<bool> DeleteServingAsync();
+    Task<bool> DeleteServingAsync(int servingId);
 }
