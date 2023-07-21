@@ -9,18 +9,15 @@ public class ServingEntity
     public int Id { get; set; }
 
     [Required]
-    public string? Measurement { get; set; }
+    public string Measurement { get; set; } = string.Empty;
 
     [Required]
     public int? Amount { get; set; }
-
-    public int? IngredentId { get; set; }
-
-    public int? ProductId { get; set; }
+    public int ProductId { get; set; }
 
     [ForeignKey(nameof(IngredientEntity.Id))]
-    public IngredientEntity IngredientId { get; set; } = null!;
-    public virtual IngredientEntity? Ingredent { get; set; }
+    public int IngredientId { get; set; }
+    public virtual IngredientEntity? Ingredent { get; set; } = null!;
 
     [ForeignKey(nameof(Product))]
     public int productNum { get; set; }

@@ -74,11 +74,11 @@ public class ProductController : Controller
     // Get: Product/Edit
     public async Task<IActionResult> Edit(int? id)
     {
+        var product = await _context.Products.FindAsync(id);
         if (id == null)
         {
             return NotFound();
         }
-        var product = await _context.Products.FindAsync(id);
         if (product == null)
         {
             return NotFound();
@@ -90,7 +90,6 @@ public class ProductController : Controller
             Name = product.Name,
             User = product.User
         };
-
         return View(vm);
     }
     [HttpPost]
@@ -134,6 +133,5 @@ public class ProductController : Controller
             return RedirectToAction(nameof(Index));
         }
         return View();
-
     }
 }

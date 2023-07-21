@@ -40,7 +40,7 @@ public class IngredientController : Controller
             return NotFound();
         }
         var ingred = await _context.Ingredients.FindAsync(id);
-        if (ingred  == null)
+        if (ingred == null)
         {
             return NotFound();
         }
@@ -82,9 +82,79 @@ public class IngredientController : Controller
             return View(entity);
 
         }
-            return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index));
     }
-    // Update Ingredient
+    // Get: Ingredient/Edit
+    public async Task<IActionResult> Update(int? id)
+    {
+        var model = await _context.Ingredients.FindAsync(id);
+        if (id is null)
+        {
+            return NotFound();
+        }
+        if (model is null)
+        {
+            return NotFound();
+        }
+        var vm = new IngredientEditVM
+        {
+            Id = model.Id,
+            Name = model.Name,
+            NCarb = model.NCarb,
+            NCarbCt = model.NCarbCt,
+            Fat = model.Fat,
+            Protein = model.Protein,
+            DefaultMeasurement = model.DefaultMeasurement,
+            DefaultAmount = model.DefaultAmount
 
-    // Delete Ingredient
+        };
+        return View(vm);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,User")] IngredientEditVM ingredient)
+    {
+        if (id != ingredient.Id)
+        {
+            return NotFound();
+        }
+        if (ModelState.IsValid)
+        {
+            var entity = await _context.Ingredients.FindAsync(id);
+            if (entity is null)
+                return RedirectToAction(nameof(Index));
+            entity.Id = ingredient.Id;
+            entity.Name = ingredient.Name;
+            entity.NCarb = ingredient.NCarb;
+            entity.NCarbCt = ingredient.NCarbCt;
+            entity.Fat = ingredient.Fat;
+            entity.Protein = ingredient.Protein;
+            entity.DefaultMeasurement = ingredient.DefaultMeasurement;
+            entity.DefaultAmount = ingredient.DefaultAmount;
+
+            _context.Ingredients.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+        return View(ingredient);
+    }
+
+    //Get: Ingredient/Delete
+    public async Task<IActionResult> Delete(int id)
+    {
+        var entity = await _context.Ingredients.FindAsync(id);
+        if (entity is null)
+        {
+            TempData["ErrorMsg"] = $"Product #{id} does not exist";
+            return RedirectToAction(nameof(Index));
+        }
+        var numOfChanges = await _context.SaveChangesAsync();
+        if (numOfChanges == 1)
+        {
+            _context.Ingredients.Remove(entity);
+            TempData["HttpResponseMessage"] = $"Product #{id} has been deleted";
+            return RedirectToAction(nameof(Index));
+        }
+        return View();
+    }
 }

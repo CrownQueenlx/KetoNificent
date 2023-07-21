@@ -6,6 +6,8 @@ namespace KetoNificent.Models.Product;
 
 public class ProductCreateVM
 {
+    [Required]
+    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
 
     [ForeignKey(nameof(UserDetail.UserId))]
