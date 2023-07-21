@@ -66,9 +66,9 @@ public class ProductController : Controller
             };
             _context.Products.Add(entity);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(product);
         }
-        return View(product);
+        return RedirectToAction(nameof(Index));
     }
 
     // Get: Product/Edit

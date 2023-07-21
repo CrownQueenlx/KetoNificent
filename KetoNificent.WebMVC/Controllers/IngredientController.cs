@@ -79,6 +79,7 @@ public class IngredientController : Controller
                 DefaultAmount = ingredient.DefaultAmount,
             };
             _context.Ingredients.Add(entity);
+            await _context.SaveChangesAsync();
             return View(entity);
 
         }
