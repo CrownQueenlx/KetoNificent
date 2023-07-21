@@ -12,9 +12,9 @@ public class IngredientService : IIngredientService
     {
         _dbContext = dbContext;
     }
-    public async Task<IngredientEntity?> CreateIngredientAsync(IngredientModel request)
+    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientModel request)
     {
-        var IngredEntity = new IngredientEntity()
+        var IngredEntity = new Data.Entities.IngredientEntity()
         {
             Id = request.Id,
             Name = request.Name,
@@ -28,7 +28,7 @@ public class IngredientService : IIngredientService
         var numberOfChanges = await _dbContext.SaveChangesAsync();
         if (numberOfChanges == 1)
         {
-            IngredientEntity response = new()
+            Data.Entities.IngredientEntity response = new()
             {
                 Id = request.Id,
                 Name = request.Name,
@@ -93,7 +93,9 @@ public class IngredientService : IIngredientService
         var ingredientEntity = await _dbContext.Ingredients.FindAsync(ingredId);
 
         // validate that the Ingredient exists
-        // if (ingredientEntity == _dbContext.Ingredients)
+        if (ingredientEntity == null)
+        return false;
+        
 
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);

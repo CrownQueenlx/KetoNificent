@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KetoNificent.Data.Entities;
@@ -9,14 +9,20 @@ public class ServingEntity
     public int Id { get; set; }
 
     [Required]
-    public string Measurement { get; set; } = string.Empty; //type of measurement
+    public string? Measurement { get; set; }
 
     [Required]
-    public int Amount { get; set; } //how many of the measurement
+    public int? Amount { get; set; }
+
+    public int? IngredentId { get; set; }
+
+    public int? ProductId { get; set; }
 
     [ForeignKey(nameof(IngredientEntity.Id))]
     public IngredientEntity IngredientId { get; set; } = null!;
-    
-    [ForeignKey(nameof(ProductEntity.Id))]
-    public ProductEntity ProductId { get; set; } = null!;
+    public virtual IngredientEntity? Ingredent { get; set; }
+
+    [ForeignKey(nameof(Product))]
+    public int productNum { get; set; }
+    public virtual ProductEntity? Product { get; set; }
 }

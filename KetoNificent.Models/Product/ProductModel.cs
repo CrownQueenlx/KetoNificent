@@ -13,5 +13,7 @@ public class ProductModel
 
     [ForeignKey(nameof(UserId))]
     public int User { get; set; }
-    public UserDetail UserId { get; set; } = null!;
+    public virtual UserDetail UserId { get; set; } = null!;
+
+    public virtual int? Serving { get; set; }
 }

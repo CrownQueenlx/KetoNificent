@@ -14,11 +14,13 @@ public class ServingModel
     public string Measurement { get; set; } = string.Empty; //type of measurement
 
     [Required]
-    public int Amount { get; set; } //how many of the measurement
+    public int? Amount { get; set; } //how many of the measurement
     
     [ForeignKey(nameof(IngredientModel.Id))]
-    public IngredientModel IngredientId { get; set; } = null!;
+    public int? ingredientid { get; set; }
+    public virtual IngredientModel IngredientId { get; set; } = null!;
     
     [ForeignKey(nameof(ProductModel.Id))]
-    public ProductModel ProductId { get; set; } = null!;
+    public int? productintid { get; set; }
+    public virtual ProductModel ProductId { get; set; } = null!;
 }

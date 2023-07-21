@@ -1,9 +1,7 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
-using KetoNificent.Models;
 using KetoNificent.Models.Product;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Controllers;
