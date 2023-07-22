@@ -23,8 +23,7 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<ServingEntity> Servings { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=KetoNificent;User=sa;Password=April28Free!;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:KetoNificentMVC");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,16 +33,20 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<UserEntity>().ToTable("Users");
 
         modelBuilder.Entity<RoleEntity>().ToTable("Roles");
-        modelBuilder.Entity<UserRoleEntity>().ToTable("UserClaims");
+        modelBuilder.Entity<UserRoleEntity>().ToTable("UserClaims")
+        .HasNoKey();
+
         modelBuilder.Entity<UserClaimEntity>().ToTable("UserLogins");
-        modelBuilder.Entity<UserTokenEntity>().ToTable("UserTokens");
+        modelBuilder.Entity<UserTokenEntity>().ToTable("UserTokens")
+        .HasNoKey();
+
         modelBuilder.Entity<RoleClaimEntity>().ToTable("RolesClaims");
 
         modelBuilder.Entity<IngredientEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Ingreden__3214EC07C413A14C");
 
-            entity.ToTable("Ingredient", "Keto");
+            entity.ToTable("IngredientEntity", "Keto");
 
             entity.Property(e => e.DefaultMeasurement)
                 .HasMaxLength(1)
@@ -56,25 +59,33 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Product__3214EC07A4D7E36A");
 
-            entity.ToTable("Product", "Keto");
+            entity.ToTable("ProductEntity", "Keto");
 
             entity.Property(e => e.Name)
                 .HasMaxLength(1)
                 .IsUnicode(false);
+        entity.Property(e => e.Name)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.UserNavigation).WithMany(p => p.ProductEntities)
+                .HasForeignKey(d => d.User)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ProductEntity_UserEntity");
         });
 
         modelBuilder.Entity<ServingEntity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Serving__3214EC073158665D");
 
-            entity.ToTable("Serving", "Keto");
+            entity.ToTable("ServingEntity", "Keto");
 
             entity.Property(e => e.Measurement)
                 .HasMaxLength(1)
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Ingredent).WithMany(p => p.Servings)
-                .HasForeignKey(d => d.IngredentId)
+                .HasForeignKey(d => d.IngredientId)
                 .HasConstraintName("FK__Serving__Ingrede__3F466844");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Servings)
@@ -82,12 +93,25 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__Serving__Product__403A8C7D");
         });
 
+        modelBuilder.Entity<UserEntity>(entity =>
+        {
+            entity.HasKey(e => e.UserId).HasName("PK__UserEnti__1788CC4C272CD311");
+
+            entity.ToTable("UserEntity", "Keto");
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .HasMaxLength(1)
+                .IsUnicode(false);
+        });
+
         OnModelCreatingPartial(modelBuilder);
 
-         // modelBuilder.Entity<ProductEntity>()
-            // .HasOne(n => n.UserId)
-            // .WithMany(p => p.UserId) 
-            // .HasForeignKey(nameof => nameof.UserId);
+        // modelBuilder.Entity<ProductEntity>()
+        // .HasOne(n => n.Id)
+        // .WithMany(p => p.Servings); 
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

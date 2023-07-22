@@ -15,4 +15,6 @@ public class ProductEntity
     public int User { get; set; }
     public virtual UserEntity UserId { get; set; } = null!; //so that users can save their combinations
     public virtual ICollection<ServingEntity> Servings { get; set; } = new List<ServingEntity>();
+    public virtual UserEntity UserNavigation { get; set; } = null!;
+
 }

@@ -1,0 +1,56 @@
+@model KetoNificent.Models.Ingredient.IngredientCreateVM;
+@{
+    ViewData["Title"] = "Ingredients";
+}
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>ERROR:</strong>@TempData["ErrorMsg"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<h1 class="display-4 text-center">New Ingredient</h1>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Create" method="post" class="row g-3">
+    <div class="col-sm-6 container form-group text-center justify-content-center align-items-start" >
+        <label asp-for="Name" class="form-label justify-content-center"></label>
+        <input asp-for="Name" class="form-control justify-content-center">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <span></span>
+    <div class="col-md-4">
+        <label asp-for="NCarb" class="form-label">Name of Carbohydrate</label>
+        <input asp-for="NCarb" class="form-control">
+        <span asp-validation-for="NCarb" class="text-danger"></span>
+        <label asp-for="NCarbCt" class="form-label"></label>
+        <input asp-for="NCarbCt" class="form-control">
+        <span asp-validation-for="NCarbCt" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Fat" class="form-label"></label>
+        <input asp-for="Fat" class="form-control">
+        <span asp-validation-for="Fat" class="text-danger"></span>
+        <label asp-for="Protein" class="form-label"></label>
+        <input asp-for="Protein" class="form-control">
+        <span asp-validation-for="Protein" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="DefaultMeasurement" class="form-label"></label>
+        <input asp-for="DefaultMeasurement" class="form-control">
+        <span asp-validation-for="DefaultMeasurement" class="text-danger"></span>
+        <label asp-for="DefaultAmount" class="form-label"></label>
+        <input asp-for="DefaultAmount" class="form-control">
+        <span asp-validation-for="DefaultAmount" class="text-danger"></span>
+    </div>
+    <a><input type="submit" value="Create" class="btn btn-primary btn-sm"></a>
+</form>
+@* public int Id { get; set; }
+public string Name { get; set; } = string.Empty;
+public string NCarb { get; set; } = string.Empty;
+public int? NCarbCt { get; set;}
+public int? FatCt { get; set; }
+public int? ProteinCt { get; set; }
+public string DefaultMeasurement { get; set; } = string.Empty;
+public int? DefaultAmount { get; set; }
+} *@

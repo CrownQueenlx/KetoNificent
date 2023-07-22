@@ -10,7 +10,7 @@ CREATE TABLE Keto.ProductEntity --(Final)Product
 (
     [Id] int NOT NULL PRIMARY KEY IDENTITY (10000,1),
     [Name] VARCHAR,
-    [UserId] INT NOT NULL FOREIGN KEY REFERENCES KETO.User(Id) -stretch goal
+    [User] INT NOT NULL FOREIGN KEY REFERENCES KETO.UserEntity(UserId) --stretch goal
 );
 GO
 CREATE TABLE Keto.IngredentEntity
@@ -30,22 +30,17 @@ CREATE TABLE Keto.ServingEntity --joining table
     [Id] int NOT NULL PRIMARY KEY IDENTITY (1,1),
     [Measurement] VARCHAR,
     [Amount] INT,
-    [IngredentId] INT FOREIGN KEY REFERENCES KETO.Ingredent(Id),
-    [ProductId] INT FOREIGN KEY REFERENCES KETO.PRODUCT(Id)
+    [IngredientId] INT FOREIGN KEY REFERENCES KETO.IngredentEntity(Id),
+    [ProductId] INT FOREIGN KEY REFERENCES KETO.ProductEntity(Id)
 );
 GO
-CREATE TABLE Keto.UserEntity --(Final)Product
-(
-    [Id] int NOT NULL PRIMARY KEY IDENTITY (10000,1),
-    [Name] VARCHAR,
-    
-);
+USE KetoNificent
 GO
-CREATE TABLE Keto.UserEntity --(Final)Product
+CREATE TABLE Keto.UserEntity 
 (
     [UserId] int NOT NULL PRIMARY KEY IDENTITY (100,1),
-    [Name] VARCHAR ,
+    [Name] VARCHAR,
     [Password] VARCHAR,
-    [DateCreated] int
+    [DateCreated] int    
 );
 GO
