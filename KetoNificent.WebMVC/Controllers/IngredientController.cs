@@ -15,21 +15,22 @@ public class IngredientController : Controller
     }
 
     // Get Ingredient
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> IndexDisplay()
     {
         // create a new VM list to display 
         List<IngredientIndexVM> ingredModel = await _context.Ingredients
-        .Select(y => new IngredientIndexVM
-        {
-            Name = y.Name,
-            NCarb = y.NCarb,
-            NCarbCt = y.NCarbCt,
-            DefaultMeasurement = y.DefaultMeasurement,
-            DefaultAmount = y.DefaultAmount
-        })
+       .Select(y => new IngredientIndexVM
+            {
+                Name = y.Name,
+                NCarb = y.NCarb,
+                NCarbCt = y.NCarbCt,
+                DefaultMeasurement = y.DefaultMeasurement,
+                DefaultAmount = y.DefaultAmount
+            })
+        
         .ToListAsync();
 
-        // show the list we just made
+        // show the list
         return View(ingredModel);
     }
     // Get Ingredient Details

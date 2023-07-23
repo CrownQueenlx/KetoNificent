@@ -10,7 +10,7 @@
     </div>
 }
 <h1 class="display-4 text-center">Customize</h1>
-<h3 class="display-6 text-center">a drink or dish</h1>
+<h1 class="display-4 text-center" style="font-size: small;">a drink or dish</h1>
 
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -21,6 +21,12 @@
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 </form>
+<form>
+    @* put search bar here *@
+</form>
+<aside>
+    @* put a scroll section here for glancing through created ingredients *@
+</aside>
 @* <div>
 @{ Html.RenderPartial("~/Views/Ingredient/Create"); }
 </div> *@
