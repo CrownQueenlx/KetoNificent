@@ -1,6 +1,6 @@
-@model KetoNificent.Models.Product.ProductCreateVM
+@model KetoNificent.Models.Product.ProductCreateVM;
 @{
-    ViewData["Title"] = "Customize a Drink";
+    ViewData["Title"] = "Ingredients";
 }
 @if (TempData["ErrorMsg"] != null)
 {
@@ -9,25 +9,24 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-<h1 class="display-4 text-center">Customize</h1>
-<h1 class="display-4 text-center" style="font-size: small;">a drink or dish</h1>
-
+<h1 class="display-4 text-center">New Drink/Dish Name</h1>
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <form asp-action="Create" method="post" class="row g-3">
-    <div class="col-md-6">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control">
+    <div class="col-sm-6 container form-group text-center justify-content-center align-items-start" >
+        <label asp-for="Name" class="form-label justify-content-center"></label>
+        <input asp-for="Name" class="form-control justify-content-center">
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <span></span>
+    <a><input type="submit" value="Create" class="btn btn-primary btn-sm"></a>
 </form>
-<form>
-    @* put search bar here *@
-</form>
-<aside>
-    @* put a scroll section here for glancing through created ingredients *@
-</aside>
-@* <div>
-@{ Html.RenderPartial("~/Views/Ingredient/Create"); }
-</div> *@
-
+@* public int Id { get; set; }
+public string Name { get; set; } = string.Empty;
+public string NCarb { get; set; } = string.Empty;
+public int? NCarbCt { get; set;}
+public int? FatCt { get; set; }
+public int? ProteinCt { get; set; }
+public string DefaultMeasurement { get; set; } = string.Empty;
+public int? DefaultAmount { get; set; }
+} *@

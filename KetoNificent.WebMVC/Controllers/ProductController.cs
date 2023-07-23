@@ -1,6 +1,7 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Product;
+using KetoNificent.Services.Ingredient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,16 @@ public class ProductController : Controller
         _context = context;
     }
 
+    // Get: Product/List of Ingredients
+    public async Task<IActionResult> Display()
+    {
+        var name = await _context.Products.Select(y => y.Name).ToListAsync();
+        var vm = new ProductIndexVM
+        {
+            NameList = name
+        };
+        return View(vm);
+    }
     // Get product
     public async Task<IActionResult> Index()
     {
@@ -47,7 +58,8 @@ public class ProductController : Controller
         };
         return View(vm);
     }
-    // Get: Product/Create
+
+    // Post: Product/Create
     public IActionResult Create(int productId)
     {
         return View();

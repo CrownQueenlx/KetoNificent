@@ -1,6 +1,7 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Ingredient;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Services.Ingredient;
@@ -100,5 +101,10 @@ public class IngredientService : IIngredientService
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);
         return false;
+    }
+
+    public static List<ModelBinderAttribute> GetItemData()
+    {
+        throw new NotImplementedException();
     }
 }

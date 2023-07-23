@@ -1,0 +1,14 @@
+  @model KetoNificent.Models.Product.ProductIndexVM
+  @{
+    ViewData["Title"] = "Product Names";
+  }
+  <h1>Product Name List</h1>
+  
+   <div class="scrollable-list" style="height: :200px; overflow: auto;">
+        <ul>
+            @foreach (var item in Model.NameList)
+            {
+                <li>@item</li>
+            }
+        </ul>
+        </div>

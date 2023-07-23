@@ -1,0 +1,25 @@
+@model List<KetoNificent.Models.Serving.ServingIndexVM>
+@{
+    ViewData["Title"] = "Serving";
+}
+<a asp-asp-controller="Serving" asp-action="Create" class="btn btn-sm btn-success">Create a Product</a>
+</div>
+<table class="table table-striped border">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name of Measurement</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ingredient in Model)
+        {
+            <tr>
+                <td>@ingredient.Id</td>
+                <td>@ingredient.Measurement</td>
+                <td>@ingredient.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>

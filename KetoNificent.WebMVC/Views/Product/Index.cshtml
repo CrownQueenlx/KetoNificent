@@ -1,0 +1,34 @@
+@model KetoNificent.Models.Product.ProductIndexVM
+@{
+    ViewData["Title"] = "Customize a Drink";
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>ERROR:</strong>@TempData["ErrorMsg"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1 class="display-4 text-center">Customize</h1>
+<h1 class="display-4 text-center" style="font-size: small;">a drink or dish</h1>
+
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form asp-action="Create" method="post" class="row g-3">
+    <figure class="col-md-6">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" asp-items="IngredientList" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+     @Html.Partial("List", Model.NameList)
+    </figure>
+</form>
+
+<view>
+    put a scroll section here for glancing through created ingredients
+</view>
+@* <div>
+@{ Html.RenderPartial("~/Views/Ingredient/Create"); }
+</div> *@
+

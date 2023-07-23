@@ -6,6 +6,7 @@ using System.Security.Claims;
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Product;
+using System.ComponentModel.DataAnnotations;
 
 namespace KetoNificent.Services.Product;
 
@@ -27,10 +28,16 @@ public class ProductService : IProductService
     // product needs a name and Id [Post]
     public async Task<ProductEntity> CreateProductAsync(ProductModel request)
     {
+        var validationResults = new List<ValidationResult>();
+        var valdationContext = new ValidationContext(request, serviceProvider: null, items: null);
+        
+        if (Validator.TryValidateObject(request, valdationContext, validationResults, true))
+        {
         var productEntity = new ProductEntity()
         {
             Name = request.Name,
-            User = _userId
+            User = _userId,
+            Servings = (ICollection<ServingEntity>)request.Servings
         };
         _dbContext.Products.Add(productEntity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
@@ -43,6 +50,7 @@ public class ProductService : IProductService
                 Name = productEntity.Name
             };
             return response;
+        }
         }
         return null;
     }
@@ -94,9 +102,5 @@ public class ProductService : IProductService
         _dbContext.Products.Remove(productEntity);
         return await _dbContext.SaveChangesAsync() == 1;
     }
-    
-
-
-
-
+   
 }

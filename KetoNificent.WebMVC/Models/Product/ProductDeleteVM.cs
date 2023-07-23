@@ -4,7 +4,7 @@ using KetoNificent.Models.User;
 
 namespace KetoNificent.Models.Product;
 
-public class ProductIndexVM
+public class ProductDeleteVM
 {
     [Required]
     public int Id { get; set; }
@@ -14,5 +14,4 @@ public class ProductIndexVM
     
     [ForeignKey(nameof(UserDetail.UserId))]
     public virtual int User { get; set; }
-    public virtual List<string> NameList { get; set; } = null!;
 }

@@ -27,7 +27,7 @@ public class ServingController : Controller
         return View(servings);
     }
     // Get Serving details
-    public async Task<IActionResult> Details(int? id)
+    public async Task<IActionResult> Detail(int? id)
     {
         if (id is null)
         {
