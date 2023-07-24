@@ -26,7 +26,7 @@ public class ProductService : IProductService
     }
 
     // product needs a name and Id [Post]
-    public async Task<ProductEntity?> CreateProductAsync(ProductModel request)
+    public async Task<ProductEntity?> CreateProductAsync(ProductDetailVM request)
     {
         var validationResults = new List<ValidationResult>();
         var valdationContext = new ValidationContext(request, serviceProvider: null, items: null);
@@ -93,7 +93,7 @@ public class ProductService : IProductService
     }
 
     // Update Product Name [Put]
-    public async Task<bool> UpdateProductByIdAsync(ProductModel request)
+    public async Task<bool> UpdateProductByIdAsync(ProductDetailVM request)
     {
         // using the null conditional operator checks if null and also the User against the _userId
         var productEntity = await _dbContext.Products.FindAsync(request.Id);

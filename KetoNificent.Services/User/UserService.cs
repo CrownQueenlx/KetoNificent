@@ -22,6 +22,27 @@ public class UserService : IUserService
         _signInManager = signInManager;
     }
 
+
+    public async Task<bool> RegisterUserAsync(UserRegister model)
+    {
+        //check if user exists so they will not be registered twice
+        if (await UserExistsAsync(model.Email, model.Username))
+            return false;
+
+        UserEntity entity = new()
+        {
+            UserName = model.Username,
+            Email = model.Email,
+            DateCreated = DateTime.Now
+        };
+
+        var passwordHasher = new PasswordHasher<UserEntity>();
+        entity.Password = passwordHasher.HashPassword(entity, model.Password);
+
+        var createResult = await _userManager.CreateAsync(entity);
+        return createResult.Succeeded;
+        //abbreviation for the await _context.saveChangesAsync section
+    }
     public async Task<bool> LoginAsync(UserLogin model)
     {
         // verifies the user exists by the username
@@ -35,35 +56,16 @@ public class UserService : IUserService
         if (verifyPasswordResult == PasswordVerificationResult.Failed)
             return false;
 
+        // if password is null deny acess
+        if (model.Password == null)
+            return false;
+
         // finally, since user exists and password passes verification, sign in the user
         await _signInManager.SignInAsync(userEntity, true);
-        return true;
+            return true;
     }
 
-    public async Task LogoutAsync()
-    {
-        await _signInManager.SignOutAsync();
-    }
-
-    public async Task<bool> RegisterUserAsync(UserRegister model)
-    {
-        if (await UserExistsAsync(model.Email, model.Username))
-        return false;
-
-        UserEntity entity = new()
-        {
-            Email = model.Email,
-            UserName = model.Username,
-            DateCreated = DateTime.Now
-        };
-
-        var passwordHasher = new PasswordHasher<UserEntity>();
-        entity.Password = passwordHasher.HashPassword(entity, model.Password);
-
-        var createResult = await _userManager.CreateAsync(entity);
-        return createResult.Succeeded;
-        //abbreviation for the await _context.saveChangesAsync section
-    }
+    public async Task LogoutAsync() => await _signInManager.SignOutAsync();
 
     public async Task<bool> UpdateUserByIdAsync(UserDetail request)
     {
