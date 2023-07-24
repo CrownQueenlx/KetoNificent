@@ -60,7 +60,7 @@ public class IngredientService : IIngredientService
         return (ingredModel);
     }
 
-    public async Task<IngredientModel?> GetIngredientByIdAsync(int ingredId)
+    public async Task<IngredientDetailVM?> GetIngredientByIdAsync(int ingredId)
     {
         // find the first Ingredient with the given Id
         var ingredientEntity = await _dbContext.Ingredients
@@ -68,7 +68,7 @@ public class IngredientService : IIngredientService
 
         // If ingredId is null -> return null, otherwise 
         // initialize and return new
-        return ingredientEntity is null ? null : new IngredientModel
+        return ingredientEntity is null ? null : new IngredientDetailVM
         {
             Id = ingredientEntity.Id,
             Name = ingredientEntity.Name,

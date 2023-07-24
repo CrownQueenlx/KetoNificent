@@ -1,5 +1,6 @@
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Serving;
+using KetoNificent.Services.Serving;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,130 +8,97 @@ namespace KetoNificent.Controllers;
 
 public class ServingController : Controller
 {
-    private readonly AppDbContext _context;
-    public ServingController(AppDbContext context)
+    private readonly IServingService _service;
+    public ServingController(IServingService service)
     {
-        _context = context;
+        _service = service;
     }
-    // Get Serving
-    public async Task<IActionResult> Index()
-    {
-        List<ServingIndexVM> servings = await _context.Servings
-        .Select(y => new ServingIndexVM
-        {
-            Id = y.Id,
-            Measurement = y.Measurement,
-            Amount = y.Amount
-        })
-        .ToListAsync();
 
-        return View(servings);
+    // Get Serving
+    public IActionResult Index()
+    {
+        return View();
     }
+
     // Get Serving details
+    [HttpGet]
     public async Task<IActionResult> Detail(int? id)
     {
+        await _service.GetServingByNameAsync();
         if (id is null)
         {
-            return NotFound();
+            return RedirectToAction("Index");
         }
-        var serving = await _context.Servings.FindAsync(id);
-        if (serving is null)
+        if (!ModelState.IsValid)
         {
-            return NotFound();
+            return RedirectToAction("Index");
         }
-        var vm = new ServingDetailVM
-        {
-            Id = serving.Id,
-            Measurement = serving.Measurement,
-            Amount = serving.Amount,
-            IngredientId = serving.IngredientId,            
-            ProductId = serving.ProductId,
-        };
-        return View(vm);
+
+        return View();
     }
     // Get: Serving/Create
     public IActionResult Create(int servingId)
     {
         return View();
     }
+
     // Post: Product/Create
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Name,Id,User")] ServingCreateVM serving)
+    public async Task<IActionResult> Create(ServingCreateVM serving)
     {
-        if (ModelState.IsValid)
+        await _service.CreateServingAsync(serving);
+        if (!ModelState.IsValid)
         {
-            var entity = new ServingEntity
-            {
-                Id = serving.Id,
-                Measurement = serving.Measurement,
-                Amount = serving.Amount,
-                IngredientId = serving.IngredientId,
-                ProductId = serving.ProductId
-            };
-            _context.Servings.Add(entity);
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
         return View(serving);
     }
+
     // Get: Serving/Edit
-    public async Task<IActionResult> Edit(int? id)
+    [HttpPut]
+    public async Task<IActionResult> Edit(ServingEntity id)
     {
-        var serving = await _context.Servings.FindAsync(id);
+        await _service.UpdateServingByIdAsync(id);
         if (id is null)
         {
-            return NotFound();
-        }
-        if (serving is null)
-        {
-            return NotFound();
+            return RedirectToAction("Index");
         }
 
-        var vm = new ServingEditVM
-        {
-            Id = serving.Id,
-            Measurement = serving.Measurement,
-            Amount = serving.Amount,
-            IngredientId = serving.IngredientId,
-            ProductId = serving.ProductId
-        };
-        return View(vm);
+        return View();
     }
+
     [HttpPost]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,User")] ServingEditVM serving)
+    public async Task<IActionResult> Edit(int id, ServingEntity serving)
     {
+        await _service.UpdateServingByIdAsync(serving);
         if (id != serving.Id)
         {
-            return NotFound();
+            return RedirectToAction("Index");
         }
-        if (ModelState.IsValid)
+        else if (!ModelState.IsValid)
         {
-            var entity = await _context.Servings.FindAsync(id);
-            if (entity is null)
-            return RedirectToAction(nameof(Index));
-            entity.Id = serving.Id;
-            entity.Measurement = serving.Measurement;
-            entity.Amount = serving.Amount;
-            entity.IngredientId = serving.IngredientId;
-            entity.ProductId = serving.ProductId;
-
-            _context.Servings.Update(entity);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
-        return View(serving);
+        else
+        {
+
+            return View(serving);
+        }
     }
 
     // Get Serving/Delete
     public async Task<IActionResult> Delete(int id)
     {
-        var entity = await _context.Servings.FindAsync(id);
-        if (entity is null)
+        await _service.DeleteServingAsync(id);
+        if (!ModelState.IsValid)
         {
             TempData["ErrorMsg"] = $"Product #{id} does not exist.";
             return RedirectToAction(nameof(Index));
         }
-        return View();
+        {
+            TempData["Msg"] = $"Product #{id} has been deleted.";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

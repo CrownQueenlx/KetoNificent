@@ -8,7 +8,7 @@ public interface IIngredientService
     // Create
     Task<IngredientEntity?> CreateIngredientAsync(IngredientCreateVM ingredient);
     // Get
-    Task<IngredientModel?> GetIngredientByIdAsync(int ingredId);
+    Task<IngredientDetailVM?> GetIngredientByIdAsync(int ingredId);
     // Update
     Task<bool> UpdateIngredientByIdAsync(IngredientEditVM request);
     // Delete

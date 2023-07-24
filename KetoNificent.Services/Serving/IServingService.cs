@@ -7,7 +7,7 @@ namespace KetoNificent.Services.Serving;
 public interface IServingService
 {
     // CREATE 
-    Task<ServingEntity?> CreateServingAsync(ServingEntity request);
+    Task<ServingEntity?> CreateServingAsync(ServingCreateVM request);
     // READ 
     Task<bool> GetServingByNameAsync();
 

@@ -12,7 +12,7 @@ public class ServingService : IServingService
     public ServingService(AppDbContext context)
     { _context = context; }
 
-    public async Task<ServingEntity?> CreateServingAsync(ServingEntity request)
+    public async Task<ServingEntity?> CreateServingAsync(ServingCreateVM request)
     {
         var entity = new ServingEntity()
         {
