@@ -16,9 +16,9 @@ public class ProductService : IProductService
     private readonly AppDbContext _dbContext;
     public ProductService(IHttpContextAccessor httpContextAccessor, AppDbContext dbContext, IConfiguration config)
     {
-        var userClaims = httpContextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+        var userClaims = httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
         var identifierClaimType = config["ClaimTypes:Id"];
-        var value = userClaims?.FindFirst(identifierClaimType)?.Value;
+        var value = userClaims?.FindFirst(identifierClaimType!)?.Value;
         var validId = int.TryParse(value, out _userId);
         if (!validId)
             throw new Exception("Attempted to build ProductService without User Id claim.");
@@ -26,37 +26,40 @@ public class ProductService : IProductService
     }
 
     // product needs a name and Id [Post]
-    public async Task<ProductEntity> CreateProductAsync(ProductModel request)
+    public async Task<ProductEntity?> CreateProductAsync(ProductModel request)
     {
         var validationResults = new List<ValidationResult>();
         var valdationContext = new ValidationContext(request, serviceProvider: null, items: null);
-        
+
         if (Validator.TryValidateObject(request, valdationContext, validationResults, true))
         {
-        var productEntity = new ProductEntity()
-        {
-            Name = request.Name,
-            User = _userId,
-            Servings = (ICollection<ServingEntity>)request.Servings
-        };
-        _dbContext.Products.Add(productEntity);
-        var numberOfChanges = await _dbContext.SaveChangesAsync();
-        if (numberOfChanges == 1)
-        {
-
-            ProductEntity response = new()
+            var productEntity = new ProductEntity()
             {
-                Id = productEntity.Id,
-                Name = productEntity.Name
+                Name = request.Name,
+                User = _userId,
+                Servings = (ICollection<ServingEntity>)request.Servings
             };
-            return response;
-        }
+            _dbContext.Products.Add(productEntity);
+            var numberOfChanges = await _dbContext.SaveChangesAsync();
+            if (numberOfChanges == 1)
+            {
+
+                ProductEntity response = new()
+                {
+                    Id = productEntity.Id,
+                    Name = productEntity.Name
+                };
+                return response;
+            }
         }
         return null;
     }
 
     // product needs to be seen [Get]
-    // how the product to join into serving
+    public async Task<ProductEntity?> GetAllProductsAsync()
+    {
+        throw new NotImplementedException();
+    }
     public async Task<ProductEntity?> GetProductByIdAsync(int prodId)
     {
         // Find first product with given Id and User matching _userId
@@ -70,6 +73,23 @@ public class ProductService : IProductService
             Id = productEntity.Id,
             Name = productEntity.Name
         };
+    }
+    //ProductService Get tolist
+    public async Task<List<ProductEntity>> GetProductDisplayAsync(int prodId)
+    {
+        // If prodId is null -> return null
+        var pIdToSearch = prodId <= 0 ? null : (int?)prodId;
+
+        // Find product with given Id and User matching _userId
+        var productEntity = await _dbContext.Products
+            .Where(y => y.Id == pIdToSearch && y.User == _userId)
+            .ToListAsync();
+        // Otherwise initialize and return new
+        return productEntity.Select(entity => new ProductEntity
+        {
+            Id = entity.Id,
+            Name = entity.Name
+        }).ToList();
     }
 
     // Update Product Name [Put]
@@ -93,14 +113,14 @@ public class ProductService : IProductService
     {
         // find by Id
         var productEntity = await _dbContext.Products.FindAsync(ProdId);
-        
+
         // Validate existence and ownership
         if (productEntity?.User != _userId)
-        return false;
+            return false;
 
         // remove Product form the DbContext and assert that the one change was saved
         _dbContext.Products.Remove(productEntity);
         return await _dbContext.SaveChangesAsync() == 1;
     }
-   
+
 }

@@ -30,7 +30,7 @@ public partial class AppDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<UserEntity>().ToTable("Users");
+        modelBuilder.Entity<UserEntity>().ToTable("UserEntity");
 
         modelBuilder.Entity<RoleEntity>().ToTable("Roles");
         modelBuilder.Entity<UserRoleEntity>().ToTable("UserClaims")
@@ -52,7 +52,7 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(1)
                 .IsUnicode(false);
             entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.NCarbCt).HasColumnName("NCarb");
+            entity.Property(e => e.NCarbCt).HasColumnName("NCarbCt");
         });
 
         modelBuilder.Entity<ProductEntity>(entity =>

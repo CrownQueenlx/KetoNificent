@@ -6,11 +6,12 @@ namespace KetoNificent.Services.Ingredient;
 public interface IIngredientService
 {
     // Create
-    Task<IngredientEntity?> CreateIngredientAsync(IngredientModel request);
+    Task<IngredientEntity?> CreateIngredientAsync(IngredientCreateVM ingredient);
     // Get
     Task<IngredientModel?> GetIngredientByIdAsync(int ingredId);
     // Update
-    Task<bool> UpdateIngredientByIdAsync(IngredientModel request);
+    Task<bool> UpdateIngredientByIdAsync(IngredientEditVM request);
     // Delete
     Task<bool> DeleteIngredientByIdAsync(int ingredId);
+    Task<List<IngredientIndexVM>> GetIngredientsAsync();
 }

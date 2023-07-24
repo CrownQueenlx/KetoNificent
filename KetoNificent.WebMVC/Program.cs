@@ -1,5 +1,8 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
+using KetoNificent.Services.Ingredient;
+using KetoNificent.Services.Product;
+using KetoNificent.Services.Serving;
 using KetoNificent.Services.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IIngredientService, IngredientService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IServingService, ServingService>();
 
 builder.Services.AddControllersWithViews();
 

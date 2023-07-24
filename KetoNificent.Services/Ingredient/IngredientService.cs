@@ -13,7 +13,7 @@ public class IngredientService : IIngredientService
     {
         _dbContext = dbContext;
     }
-    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientModel request)
+    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientCreateVM request)
     {
         var IngredEntity = new Data.Entities.IngredientEntity()
         {
@@ -44,6 +44,21 @@ public class IngredientService : IIngredientService
         return null;
 
     }
+    public async Task<List<IngredientIndexVM>> GetIngredientsAsync()
+    {
+        List<IngredientIndexVM> ingredModel = await _dbContext.Ingredients
+               .Select(y => new IngredientIndexVM
+               {
+                   Name = y.Name,
+                   NCarb = y.NCarb,
+                   NCarbCt = y.NCarbCt,
+                   DefaultMeasurement = y.DefaultMeasurement,
+                   DefaultAmount = y.DefaultAmount
+               })
+                .ToListAsync();
+
+        return (ingredModel);
+    }
 
     public async Task<IngredientModel?> GetIngredientByIdAsync(int ingredId)
     {
@@ -65,13 +80,13 @@ public class IngredientService : IIngredientService
         };
     }
 
-    public async Task<bool> UpdateIngredientByIdAsync(IngredientModel request)
+    public async Task<bool> UpdateIngredientByIdAsync(IngredientEditVM request)
     {
         // find the first Ingredient by Id
         var ingredEntity = await _dbContext.Ingredients.FindAsync(request.Id);
         //    check if null
         if (ingredEntity is null)
-        return false;
+            return false;
 
         // update entity's properties
         ingredEntity.Name = request.Name;
@@ -79,7 +94,7 @@ public class IngredientService : IIngredientService
         ingredEntity.Fat = request.Fat;
         ingredEntity.Protein = request.Protein;
         ingredEntity.DefaultMeasurement = request.DefaultMeasurement;
-        ingredEntity.DefaultAmount =request.DefaultAmount;
+        ingredEntity.DefaultAmount = request.DefaultAmount;
 
         // save the changes to the database, capture the number of rows changed
         var numOfChanges = await _dbContext.SaveChangesAsync();
@@ -87,7 +102,7 @@ public class IngredientService : IIngredientService
         // put numOfChanges equal to one to show if only one row was updated
         return numOfChanges == 1;
     }
-    
+
     public async Task<bool> DeleteIngredientByIdAsync(int ingredId)
     {
         // find the Ingredient by the given Id
@@ -95,8 +110,8 @@ public class IngredientService : IIngredientService
 
         // validate that the Ingredient exists
         if (ingredientEntity == null)
-        return false;
-        
+            return false;
+
 
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);

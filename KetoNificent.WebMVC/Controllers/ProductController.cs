@@ -2,51 +2,41 @@ using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Product;
 using KetoNificent.Services.Ingredient;
+using KetoNificent.Services.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Controllers;
 
+[Authorize]
 public class ProductController : Controller
 {
-    private readonly AppDbContext _context;
-    public ProductController(AppDbContext context)
+    private readonly IProductService _service;
+    public ProductController(IProductService service)
     {
-        _context = context;
+        _service = service;
     }
 
     // Get: Product/List of Ingredients
-    public async Task<IActionResult> Display()
+    public async Task<IActionResult> Display(int id)
     {
-        var name = await _context.Products.Select(y => y.Name).ToListAsync();
+        var name = await _service.GetProductDisplayAsync(id);
         var vm = new ProductIndexVM
         {
-            NameList = name
+            NameList = new()
         };
         return View(vm);
     }
     // Get product
-    public async Task<IActionResult> Index()
+    public Task<ProductIndexVM> Index()
     {
-        List<ProductIndexVM> products = await _context.Products
-        .Select(y => new ProductIndexVM
-        {
-            Id = y.Id,
-            Name = y.Name,
-            User = y.User
-        })
-        .ToListAsync();
-
-        return View(products);
+        return View();
     }
     // Get product details
-    public async Task<IActionResult> Details(int? id)
+    public async Task<IActionResult> Details(int id)
     {
-        if (id is null)
-        {
-            return NotFound();
-        }
-        var product = await _context.Products.FindAsync(id);
+        var product = await _service.GetProductByIdAsync(id);
         if (product is null)
         {
             return NotFound();
