@@ -1,0 +1,29 @@
+@model KetoNificent.Models.User.UserLogin
+@{
+    ViewData["Title"] = "Login";
+
+    string? returnUrl = Context.Request.Query["ReturnUrl"];
+}
+
+<div class="d-flex flex-wrap">
+    <div class="col-12 col-md-6 offset-md-3">
+        <h1 class="display-4 mb-3 text-center text-bold">Log In</h1>
+
+        <form asp-action="Login" method="post" asp-route-returnUrl="@returnUrl">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" asp-for="UserName" placeholder="UserName">
+                <label asp-for="UserName"></label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" asp-for="Password" placeholder="Password">
+                <label asp-for="Password"></label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <button type="submit" class="btn btn-sm btn-primary">Log in</button>
+                <a asp-action="Register" asp-controller="Account" class="text-center p-1 btn btn-sm btn-link" role="button">Register as a new user</a>
+            </div>
+        </form>
+    </div>
+</div>

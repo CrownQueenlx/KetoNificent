@@ -12,6 +12,6 @@ public class ProductDeleteVM
     [Required, MaxLength(100)]
     public string Name { get; set; } = string.Empty;
     
-    [ForeignKey(nameof(UserDetail.UserId))]
+    [ForeignKey(nameof(UserDetailVM.UserId))]
     public virtual int User { get; set; }
 }

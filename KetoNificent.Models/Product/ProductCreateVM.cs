@@ -10,6 +10,6 @@ public class ProductCreateVM
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
 
-    [ForeignKey(nameof(UserDetail.UserId))]
+    [ForeignKey(nameof(UserDetailVM.UserId))]
     public virtual int User { get; set; }
 }

@@ -26,12 +26,12 @@ public class UserService : IUserService
     public async Task<bool> RegisterUserAsync(UserRegister model)
     {
         //check if user exists so they will not be registered twice
-        if (await UserExistsAsync(model.Email, model.Username))
+        if (await UserExistsAsync(model.Email, model.UserName))
             return false;
 
         UserEntity entity = new()
         {
-            UserName = model.Username,
+            UserName = model.UserName,
             Email = model.Email,
             DateCreated = DateTime.Now
         };
@@ -67,7 +67,7 @@ public class UserService : IUserService
 
     public async Task LogoutAsync() => await _signInManager.SignOutAsync();
 
-    public async Task<bool> UpdateUserByIdAsync(UserDetail request)
+    public async Task<bool> UpdateUserByIdAsync(UserDetailVM request)
     {
         var userEntity = await _context.Users.FindAsync(request.UserId);
         if (userEntity is null)

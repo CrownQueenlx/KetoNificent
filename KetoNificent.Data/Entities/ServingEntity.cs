@@ -13,13 +13,12 @@ public class ServingEntity
 
     [Required]
     public int? Amount { get; set; }
-    public int ProductId { get; set; }
-
+    
     [ForeignKey(nameof(IngredientEntity.Id))]
     public int IngredientId { get; set; }
     public virtual IngredientEntity? Ingredent { get; set; } = null!;
 
     [ForeignKey(nameof(Product))]
-    public int productNum { get; set; }
+    public int ProductId { get; set; }
     public virtual ProductEntity? Product { get; set; }
 }

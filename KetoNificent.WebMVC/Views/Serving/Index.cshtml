@@ -2,24 +2,30 @@
 @{
     ViewData["Title"] = "Serving";
 }
-<a asp-asp-controller="Serving" asp-action="Create" class="btn btn-sm btn-success">Create a Product</a>
+<a asp-controller="Serving" asp-action="Index" class="btn btn-sm btn-success">Create a Product</a>
 </div>
 <table class="table table-striped border">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Name of Measurement</th>
+            <th>Name of Product</th>
+            <th>Measurement</th>
             <th>Amount</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var ingredient in Model)
+        @if (Model != null)
         {
-            <tr>
-                <td>@ingredient.Id</td>
-                <td>@ingredient.Measurement</td>
-                <td>@ingredient.Amount</td>
-            </tr>
+            @foreach (var serving in Model)
+            {
+                <tr>
+                    <td>@serving.Id</td>
+                    <td>@serving.ProductId</td> @* Contains the name of the Product *@
+                    <td>@serving.Measurement</td>
+                    <td>@serving.Amount</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
+</div>

@@ -30,7 +30,12 @@ public partial class AppDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<UserEntity>().ToTable("UserEntity");
+        modelBuilder.Entity<UserEntity>().ToTable("UserEntity").HasKey(u => u.UserId);
+        modelBuilder.Entity<UserEntity>(entity => {
+            entity.ToTable("UserEntity");
+            entity.HasKey(e => e.UserId);
+            entity.Ignore(e => e.Id);
+        });
 
         modelBuilder.Entity<RoleEntity>().ToTable("Roles");
         modelBuilder.Entity<UserRoleEntity>().ToTable("UserClaims")

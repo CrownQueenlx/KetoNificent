@@ -2,26 +2,33 @@
 @using KetoNificent.Data.Entities
 @inject SignInManager<UserEntity> SignInManager
 
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            <li class="nav-item">
-                <a class="nav-link">
-                    Hello @User.Identity?.Name!
-                </a>
-            </li>
-            <li class="nav-item">
-                <a asp-action="Logout" asp-controller="Account" class="nav-link">
-                    Logout
-                </a>
-            </li>
-        }
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link" asp-action="Login" asp-controller="Account">
-                    Login
-                </a>
-            </li>
-        }
-    </ul>
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link">
+                Hello @User.Identity?.Name!
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="Logout" asp-controller="Account" class="nav-link">
+                Logout
+            </a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-action="Register" asp-controller="Account">
+                Register
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" asp-action="Login" asp-Controller="Account">
+                Login
+            </a>
+        </li>
+    }
+</ul>
+</href>

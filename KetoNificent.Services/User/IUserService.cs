@@ -12,7 +12,7 @@ public interface IUserService
     // Get methods are private in the UserService
     
     // Put
-    Task<bool> UpdateUserByIdAsync(UserDetail request);
+    Task<bool> UpdateUserByIdAsync(UserDetailVM request);
     // Delete
     Task<bool> DeleteUserAsync(int id);
 }

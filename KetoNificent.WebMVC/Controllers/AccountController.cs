@@ -24,24 +24,24 @@ public class AccountController : Controller
         // First validate the request model, reject if invalid
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return NotFound();
         }
 
         // Try to register the user, reject if failed
         var registerResult = await _userService.RegisterUserAsync(model);
-        if (registerResult == false)
+        if (registerResult != false)
         {
             // TODO: Add error to page
             return View(model);
         }
 
         // Login the new user, redirect to home after
-        UserLogin loginModel = new()
+        UserRegister registerModel = new()
         {
-            UserName = model.Username,
+            UserName = model.UserName,
             Password = model.Password
         };
-        await _userService.LoginAsync(loginModel);
+        await _userService.RegisterUserAsync(registerModel);
         return RedirectToAction("Index", "Home");
     }
 

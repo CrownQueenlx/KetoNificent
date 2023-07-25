@@ -12,16 +12,17 @@ public class ServingService : IServingService
     public ServingService(AppDbContext context)
     { _context = context; }
 
+// Post: Create
     public async Task<ServingEntity?> CreateServingAsync(ServingCreateVM request)
     {
         var entity = new ServingEntity()
         {
             Measurement = request.Measurement,
             Amount = request.Amount,
-            IngredientId = request.IngredientId,
-            // be certain that the builder waits for the IngredientId to be fetched so that it will be connected
-            // IngredientId = await _context.FindAsync(Ingredient.id == ServingEntity.IngredientId),
-            // ProductId = new() ServingEntity.ProductId
+            IngredientId = request.IngredientId, 
+            //these items do not need to be awaited from the *~Entity context 
+            //because the ForeignKey handles the connection to the information
+            ProductId = request.ProductId,
         };
         _context.Servings.Add(entity);
         var numOfChanges = await _context.SaveChangesAsync();
@@ -32,14 +33,15 @@ public class ServingService : IServingService
                 Id = request.Id,
                 Measurement = request.Measurement,
                 Amount = request.Amount,
-                // IngredientId = await _context.Ingredients.FirstOrDefault(Id),
-                // ProductId = await _context.Products.FirstOrDefault(Id),
+                IngredientId = request.IngredientId,
+                ProductId = request.ProductId,
             };
             return response;
         }
         return null;
     }
 
+// Get: Read By Id
     public async Task<bool> GetServingByNameAsync()
     {
         var serving = await _context.Servings.FindAsync();
@@ -49,9 +51,10 @@ public class ServingService : IServingService
         return false;
     }
 
+    // Update
     public async Task<bool> UpdateServingByIdAsync(ServingEntity request)
     {
-        var isValid = await _context.Servings.FindAsync();
+        var isValid = await _context.Servings.FindAsync(request);
         if (request != isValid)
         return false;
         if (request == isValid)
@@ -65,6 +68,9 @@ public class ServingService : IServingService
         var numOfChanges = await _context.SaveChangesAsync();
          return numOfChanges == 1;
     }
+
+
+    // Delete: by Id
     public async Task<bool> DeleteServingAsync(int servingId)
     {
         var servingEntity = await _context.Servings.FindAsync(servingId);
@@ -75,8 +81,4 @@ public class ServingService : IServingService
         _context.Servings.Remove(servingEntity);
         return await _context.SaveChangesAsync() == 1;
     }
-    // private Task<Serving.IngredientId> GetIngredientIdAsync()
-    // {
-
-    // }
 }
