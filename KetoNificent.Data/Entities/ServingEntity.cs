@@ -14,7 +14,7 @@ public class ServingEntity
     [Required]
     public int? Amount { get; set; }
     
-    [ForeignKey(nameof(IngredientEntity.Id))]
+    [ForeignKey(nameof(Ingredent))]
     public int IngredientId { get; set; }
     public virtual IngredientEntity? Ingredent { get; set; } = null!;
 

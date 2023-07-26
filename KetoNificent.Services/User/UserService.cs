@@ -36,10 +36,7 @@ public class UserService : IUserService
             DateCreated = DateTime.Now
         };
 
-        var passwordHasher = new PasswordHasher<UserEntity>();
-        entity.Password = passwordHasher.HashPassword(entity, model.Password);
-
-        var createResult = await _userManager.CreateAsync(entity);
+        var createResult = await _userManager.CreateAsync(entity, model.Password);
         return createResult.Succeeded;
         //abbreviation for the await _context.saveChangesAsync section
     }
@@ -51,9 +48,8 @@ public class UserService : IUserService
             return false;
 
         // verifies the correct password was given
-        var passwordHasher = new PasswordHasher<UserEntity>();
-        var verifyPasswordResult = passwordHasher.VerifyHashedPassword(userEntity, userEntity.Password, model.Password);
-        if (verifyPasswordResult == PasswordVerificationResult.Failed)
+        var isValidPassword = await _userManager.CheckPasswordAsync(userEntity, model.Password);
+        if (!isValidPassword)
             return false;
 
         // if password is null deny acess
@@ -75,9 +71,8 @@ public class UserService : IUserService
 
         // update entity's properties
         userEntity.Name = request.Name;
-        userEntity.Password = request.Password;
 
-        var createResult = await _userManager.CreateAsync(userEntity);
+        var createResult = await _userManager.CreateAsync(userEntity, request.Password);
         return createResult.Succeeded;
     }
 

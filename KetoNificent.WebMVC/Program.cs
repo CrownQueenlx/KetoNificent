@@ -4,6 +4,7 @@ using KetoNificent.Services.Ingredient;
 using KetoNificent.Services.Product;
 using KetoNificent.Services.Serving;
 using KetoNificent.Services.User;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +25,15 @@ builder.Services.AddScoped<IServingService, ServingService>();
 builder.Services.AddControllersWithViews();
 
 // Enables using Identity Managers (Users, SignIn, Password)
-builder.Services.AddDefaultIdentity<UserEntity>()
-    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options => {
+    options.Password.RequiredLength = 4;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 // Configure what happens when a logged out user tries to access an authorized route
 builder.Services.ConfigureApplicationCookie(options =>

@@ -16,12 +16,12 @@ public class ProductService : IProductService
     private readonly AppDbContext _dbContext;
     public ProductService(IHttpContextAccessor httpContextAccessor, AppDbContext dbContext, IConfiguration config)
     {
-        var userClaims = httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
-        var identifierClaimType = config["ClaimTypes:Id"];
-        var value = userClaims?.FindFirst(identifierClaimType!)?.Value;
-        var validId = int.TryParse(value, out _userId);
-        if (!validId)
-            throw new Exception("Attempted to build ProductService without User Id claim.");
+        // var userClaims = httpContextAccessor.HttpContext!.User.Identity as ClaimsIdentity;
+        // var identifierClaimType = config["ClaimTypes:Id"]!;
+        // var value = userClaims!.FindFirst(identifierClaimType!)!.Value!;
+        // var validId = int.TryParse(value, out _userId);
+        // if (!validId)
+        //     throw new Exception("Attempted to build ProductService without User Id claim.");
         _dbContext = dbContext;
     }
 
@@ -36,7 +36,7 @@ public class ProductService : IProductService
             var productEntity = new ProductEntity()
             {
                 Name = request.Name,
-                User = _userId,
+                UserId = _userId,
                 Servings = (ICollection<ServingEntity>)request.Servings
             };
             _dbContext.Products.Add(productEntity);
@@ -64,7 +64,7 @@ public class ProductService : IProductService
     {
         // Find first product with given Id and User matching _userId
         var productEntity = await _dbContext.Products
-            .FirstOrDefaultAsync(y => y.Id == prodId && y.User == _userId
+            .FirstOrDefaultAsync(y => y.Id == prodId && y.UserId == _userId
             );
         // If productEntity is null -> return null
         // Otherwise initialize and return new
@@ -82,7 +82,7 @@ public class ProductService : IProductService
 
         // Find product with given Id and User matching _userId
         var productEntity = await _dbContext.Products
-            .Where(y => y.Id == pIdToSearch && y.User == _userId)
+            .Where(y => y.Id == pIdToSearch && y.UserId == _userId)
             .ToListAsync();
         // Otherwise initialize and return new
         return productEntity.Select(entity => new ProductEntity
@@ -97,7 +97,7 @@ public class ProductService : IProductService
     {
         // using the null conditional operator checks if null and also the User against the _userId
         var productEntity = await _dbContext.Products.FindAsync(request.Id);
-        if (productEntity?.User != _userId)
+        if (productEntity?.UserId != _userId)
             return false;
 
         // Now we update the entity's properties
@@ -115,7 +115,7 @@ public class ProductService : IProductService
         var productEntity = await _dbContext.Products.FindAsync(ProdId);
 
         // Validate existence and ownership
-        if (productEntity?.User != _userId)
+        if (productEntity?.UserId != _userId)
             return false;
 
         // remove Product form the DbContext and assert that the one change was saved

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Data.Entities;
 
-public partial class AppDbContext : DbContext
+public partial class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, int>
 {
     public AppDbContext()
     {
@@ -14,7 +16,7 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-    public virtual DbSet<UserEntity> Users { get; set; } = null!;
+    public override DbSet<UserEntity> Users { get; set; } = null!;
 
     public virtual DbSet<IngredientEntity> Ingredients { get; set; } = null!;
 
@@ -30,22 +32,9 @@ public partial class AppDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<UserEntity>().ToTable("UserEntity").HasKey(u => u.UserId);
-        modelBuilder.Entity<UserEntity>(entity => {
-            entity.ToTable("UserEntity");
-            entity.HasKey(e => e.UserId);
-            entity.Ignore(e => e.Id);
-        });
+        modelBuilder.Entity<UserEntity>().ToTable("UserEntity").HasKey(u => u.Id);
 
         modelBuilder.Entity<RoleEntity>().ToTable("Roles");
-        modelBuilder.Entity<UserRoleEntity>().ToTable("UserClaims")
-        .HasNoKey();
-
-        modelBuilder.Entity<UserClaimEntity>().ToTable("UserLogins");
-        modelBuilder.Entity<UserTokenEntity>().ToTable("UserTokens")
-        .HasNoKey();
-
-        modelBuilder.Entity<RoleClaimEntity>().ToTable("RolesClaims");
 
         modelBuilder.Entity<IngredientEntity>(entity =>
         {
@@ -73,8 +62,8 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(1)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.UserNavigation).WithMany(p => p.ProductEntities)
-                .HasForeignKey(d => d.User)
+            entity.HasOne(d => d.User).WithMany(p => p.ProductEntities)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProductEntity_UserEntity");
         });
@@ -100,14 +89,11 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<UserEntity>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__UserEnti__1788CC4C272CD311");
+            entity.HasKey(e => e.Id).HasName("PK__UserEnti__1788CC4C272CD311");
 
             entity.ToTable("UserEntity", "Keto");
 
             entity.Property(e => e.Name)
-                .HasMaxLength(1)
-                .IsUnicode(false);
-            entity.Property(e => e.Password)
                 .HasMaxLength(1)
                 .IsUnicode(false);
         });
