@@ -16,13 +16,25 @@
 
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<form asp-action="Create" method="post" class="row g-3">
+@* <form asp-action="Index" method="Get" class="row g-3">
     <figure class="col-md-6">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" asp-items="IngredientList" />
         <span asp-validation-for="Name" class="text-danger"></span>
-     @Html.Partial("List", Model.NameList)
     </figure>
-</form>
+    <form> *@
+            <h1>Product Name List</h1>
+  
+   <div class="box scrollable-list" style="height: 200px; overflow: auto;">
+        <ul>
+            @* input with radio type *@
+            @foreach (var item in Model.NameList)
+            {
+                <li>@item.</li>
+            }
+        </ul>
+
+        </div>
+
 
 

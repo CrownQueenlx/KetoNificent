@@ -16,6 +16,4 @@ public class ProductDetailVM
     [ForeignKey(nameof(UserDetailVM.UserId))]
     public virtual int User { get; set; }
     public virtual UserDetailVM UserId { get; set; } = null!;
-
-    public virtual ICollection<ServingDetailVM> Servings { get; set; } = new List<ServingDetailVM>();
 }

@@ -86,11 +86,11 @@ public class UserService : IUserService
 
     private async Task<UserEntity?> GetUserByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(user => user.Email.ToLower() == email.ToLower());
+        return await _context.Users.FirstOrDefaultAsync(user => user.Email!.ToLower() == email.ToLower());
     }
     private async Task<UserEntity?> GetUserByUsernameAsync(string username)
     {
-        return await _context.Users.FirstOrDefaultAsync(user => user.UserName.ToLower() == username.ToLower());
+        return await _context.Users.FirstOrDefaultAsync(user => user.UserName!.ToLower() == username.ToLower());
     }
     private async Task<bool> UserExistsAsync(string email, string username)
     {

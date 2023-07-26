@@ -1,0 +1,27 @@
+@model List<KetoNificent.Models.Ingredient.IngredientDetailVM>
+@{
+    ViewData["Title"] = "Detail";
+}
+<a asp-asp-controller="Product" asp-action="Create" class="btn btn-sm btn-success">Create a Product</a>
+<div>
+<table class="table table-striped border">
+    <thead>
+        <th>Fat Count</th>
+        <th>Protein Count</th>
+        <th>Measurement</th>
+        <th>Serving Size</th>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <td>@item.Fat</td>
+            <td>@item.Protein</td>
+            <td>@item.DefaultMeasurement</td>
+            <td>@item.DefaultAmount</td>
+        }
+
+    </tbody>
+    </div>
+
+</table>
+</div>

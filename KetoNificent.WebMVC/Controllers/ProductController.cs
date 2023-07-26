@@ -29,8 +29,17 @@ public class ProductController : Controller
         return View(vm);
     }
     // Get product
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+         var name = await _service.GetAllProductsAsync();
+        var vm = new ProductIndexVM
+        {
+            NameList = new()
+        };
+        // need you model to be called from the service 
+        // pass it to the view
+        // in the service change the return type to viewModel *
+        // after this the view should load
         return View();
     }
     // Get product details
@@ -57,7 +66,7 @@ public class ProductController : Controller
 
     // Post: Product/Create
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(ProductDetailVM product)
+    public async Task<IActionResult> Create(ProductCreateVM product)
     {
         await _service.CreateProductAsync(product);
         if (!ModelState.IsValid)
