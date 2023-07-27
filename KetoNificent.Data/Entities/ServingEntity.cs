@@ -12,7 +12,7 @@ public class ServingEntity
     public string Measurement { get; set; } = string.Empty;
 
     [Required]
-    public int? Amount { get; set; }
+    public int Amount { get; set; }
     
     [ForeignKey(nameof(Ingredent))]
     public int IngredientId { get; set; }

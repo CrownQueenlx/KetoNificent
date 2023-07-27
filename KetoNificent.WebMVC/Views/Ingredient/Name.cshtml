@@ -1,0 +1,14 @@
+@model List<KetoNificent.Models.Ingredient.IngredientListItemVM>
+@{
+    ViewData["Title"] = "Ingredient List View";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="border border-3">
+<ul class="list-unstyled">
+    @foreach (var ingredient in Model)
+    {
+        <li>@ingredient.Name</li>
+    }
+</ul>
+</div>

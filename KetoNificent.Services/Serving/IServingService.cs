@@ -9,8 +9,7 @@ public interface IServingService
     // CREATE 
     Task<ServingEntity?> CreateServingAsync(ServingCreateVM request);
     // READ 
-    Task<bool> GetServingByNameAsync();
-
+    Task<ServingDetailVM?> GetServingByIdAsync(int model);
     // UPDATE 
     Task<bool> UpdateServingByIdAsync(ServingEntity request);
 

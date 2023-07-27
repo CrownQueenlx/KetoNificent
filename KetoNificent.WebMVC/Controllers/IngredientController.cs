@@ -32,6 +32,11 @@ public class IngredientController : Controller
        
         return View(ingred);
     }
+    public async Task<IActionResult> Name(ServingEntity model)
+    {
+        var vm = await _service.GetIngredientNamesByServingAsync(model);
+        return View(vm);
+    }
     // Get: Ingredient/Create
     public IActionResult Create(int ingredId)
     {

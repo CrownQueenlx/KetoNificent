@@ -46,3 +46,8 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 50px;
 }
+
+.img {
+  max-height: 12.5vh;
+  max-width: 9vw;
+}

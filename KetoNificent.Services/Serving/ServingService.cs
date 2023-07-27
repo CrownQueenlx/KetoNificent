@@ -1,8 +1,10 @@
 using KetoNificent.Data;
 using KetoNificent.Data.Entities;
+using KetoNificent.Models.Ingredient;
 using KetoNificent.Models.Serving;
 using KetoNificent.Models.User;
 using KetoNificent.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Services.Serving;
 
@@ -12,17 +14,17 @@ public class ServingService : IServingService
     public ServingService(AppDbContext context)
     { _context = context; }
 
-// Post: Create
-    public async Task<ServingEntity?> CreateServingAsync(ServingCreateVM request)
+    // Post: Create
+    public async Task<ServingEntity?> CreateServingAsync(ServingCreateVM model)
     {
         var entity = new ServingEntity()
         {
-            Measurement = request.Measurement,
-            Amount = request.Amount,
-            IngredientId = request.IngredientId, 
+            Measurement = model.Measurement,
+            Amount = model.Amount,
+            IngredientId = model.IngredientId,
             //these items do not need to be awaited from the *~Entity context 
             //because the ForeignKey handles the connection to the information
-            ProductId = request.ProductId,
+            ProductId = model.ProductId,
         };
         _context.Servings.Add(entity);
         var numOfChanges = await _context.SaveChangesAsync();
@@ -30,25 +32,35 @@ public class ServingService : IServingService
         {
             ServingEntity response = new()
             {
-                Id = request.Id,
-                Measurement = request.Measurement,
-                Amount = request.Amount,
-                IngredientId = request.IngredientId,
-                ProductId = request.ProductId,
+                Id = model.Id,
+                Measurement = model.Measurement,
+                Amount = model.Amount,
+                IngredientId = model.IngredientId,
+                ProductId = model.ProductId,
             };
             return response;
         }
         return null;
     }
 
-// Get: Read By Id
-    public async Task<bool> GetServingByNameAsync()
+    // Get: Read By Id
+    public async Task<ServingDetailVM?> GetServingByIdAsync(int model)
     {
-        var serving = await _context.Servings.FindAsync();
-        var numberOfChanges = await _context.SaveChangesAsync();
-        if (numberOfChanges == 1)
-        return true;
-        return false;
+        //get serving entity
+        //get corresponding ingredientId s
+        // get the names for those ingredients
+        // return a list of names
+         var serving = await _context.Servings
+         .FirstOrDefaultAsync(y => y.Id == model);
+         return serving is null ? null : new ServingDetailVM()
+        {
+            Id = serving.Id,
+            Measurement = serving.Measurement,
+            Amount = serving.Amount,
+            IngredientId = serving.IngredientId,
+            ProductId = serving.ProductId
+        };
+        // return (serving);
     }
 
     // Update
@@ -56,9 +68,9 @@ public class ServingService : IServingService
     {
         var isValid = await _context.Servings.FindAsync(request);
         if (request != isValid)
-        return false;
+            return false;
         if (request == isValid)
-        return true;
+            return true;
         var serving = new ServingEntity();
         serving.Measurement = request.Measurement;
         serving.Amount = request.Amount;
@@ -66,7 +78,7 @@ public class ServingService : IServingService
         serving.ProductId = request.ProductId;
 
         var numOfChanges = await _context.SaveChangesAsync();
-         return numOfChanges == 1;
+        return numOfChanges == 1;
     }
 
 
@@ -76,7 +88,7 @@ public class ServingService : IServingService
         var servingEntity = await _context.Servings.FindAsync(servingId);
 
         if (servingEntity is null)
-        return false;
+            return false;
 
         _context.Servings.Remove(servingEntity);
         return await _context.SaveChangesAsync() == 1;

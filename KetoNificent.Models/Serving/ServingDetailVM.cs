@@ -1,6 +1,6 @@
 namespace KetoNificent.Models.Serving;
 
-public class ServingCreateVM
+public class ServingDetailVM
 {
     public int Id { get; set; }
     public string Measurement { get; set; } = string.Empty;

@@ -14,6 +14,12 @@ public class ServingController : Controller
         _service = service;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Index(int id)
+    {
+        var model = await _service.GetServingByIdAsync(id);
+        return View(model);
+    }
     // Get Serving
     public IActionResult Index()
     {
@@ -22,10 +28,10 @@ public class ServingController : Controller
 
     // Get Serving details
     [HttpGet]
-    public async Task<IActionResult> Detail(int? id)
+    public async Task<IActionResult> Detail(int id)
     {
-        await _service.GetServingByNameAsync();
-        if (id is null)
+        await _service.GetServingByIdAsync(id);
+        if (id is <= 0)
         {
             return RedirectToAction("Index");
         }

@@ -13,9 +13,9 @@ public class IngredientService : IIngredientService
     {
         _dbContext = dbContext;
     }
-    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientCreateVM model)
+    public async Task<IngredientEntity?> CreateIngredientAsync(IngredientCreateVM model)
     {
-        var IngredEntity = new Data.Entities.IngredientEntity()
+        var IngredEntity = new IngredientEntity()
         {
             Id = model.Id,
             Name = model.Name,
@@ -61,6 +61,25 @@ public class IngredientService : IIngredientService
 
         return (ingredModel);
     }
+
+    // Get IngredientNames as a list
+    public async Task<List<IngredientListItemVM>> GetIngredientNamesByServingAsync(ServingEntity model)
+    {
+        if (model is null)
+        {
+            return null;
+        }
+
+        List<IngredientListItemVM> vm = await _dbContext.Ingredients
+        .Select(i => new IngredientListItemVM
+        {
+            Name = i.Name
+        })
+        .ToListAsync();
+        return (vm);
+    }
+
+
     public async Task<List<IngredientDetailVM>> GetIngredientDetailsAsync(IngredientDetailVM model)
     {
         List<IngredientDetailVM> ingredModel = await _dbContext.Ingredients
@@ -134,10 +153,5 @@ public class IngredientService : IIngredientService
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);
         return false;
-    }
-
-    public static List<ModelBinderAttribute> GetItemData()
-    {
-        throw new NotImplementedException();
     }
 }
