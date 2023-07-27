@@ -1,4 +1,4 @@
-@model KetoNificent.Models.Product.ProductIndexVM
+@model IEnumerable<KetoNificent.Models.Product.ProductIndexVM>
 @{
     ViewData["Title"] = "Customize a Drink";
 }
@@ -24,16 +24,25 @@
     </figure>
     <form> *@
             <h1>Product Name List</h1>
-  
+  <table class="table table-striped border">
+    <thead>
+        <td>Id</td>
+        <td>Name</td>
+        <td>UserId</td>
+    </thead>
    <div class="box scrollable-list" style="height: 200px; overflow: auto;">
-        <ul>
+        <tbody>
             @* input with radio type *@
-            @foreach (var item in Model.NameList)
+            @foreach (var item in Model)
             {
-                <li>@item.</li>
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.UserId</td>
+            </tr>
             }
-        </ul>
-
+        </tbody>
+</Table>
         </div>
 
 

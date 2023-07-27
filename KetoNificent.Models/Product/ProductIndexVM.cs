@@ -13,6 +13,6 @@ public class ProductIndexVM
     [Required, MaxLength(100)]
     public string Name { get; set; } = string.Empty;
     
-    public virtual int User { get; set; }
+    public virtual int UserId { get; set; }
     public virtual List<string> NameList { get; set; } = null!;
 }

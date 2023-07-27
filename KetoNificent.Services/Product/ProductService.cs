@@ -57,41 +57,36 @@ public class ProductService : IProductService
 
         if (Validator.TryValidateObject(model, valdationContext, validationResults, true))
         {
-            var productEntity = new ProductEntity()
+            ProductEntity response = new()
             {
                 Id = model.Id,
                 Name = model.Name,
                 UserId = _userId,
             };
-            _dbContext.Products.Add(productEntity);
-            var numberOfChanges = await _dbContext.SaveChangesAsync();
-            if (numberOfChanges == 1)
-            {
-
-                ProductEntity response = new()
-                {
-                    Id = productEntity.Id,
-                    Name = productEntity.Name
-                };
-                return response;
-            }
+            _dbContext.Products.Add(response);
+            return response;
+        }
+        var numberOfChanges = await _dbContext.SaveChangesAsync();
+        if (numberOfChanges != 1)
+        {
+            return null;
         }
         return null;
     }
 
     // product needs to be seen [Get]
-    public async Task<IEnumerable<ProductEntity?>> GetAllProductsAsync()
+    public async Task<IEnumerable<ProductIndexVM>> GetAllProductsAsync(ProductEntity model)
     {
         var allProd = await _dbContext.Products
         .Where(prod => prod.UserId == _userId)
-        .Select(prod => new ProductEntity
+        .Select(prod => new ProductIndexVM
         {
             Id = prod.Id,
             Name = prod.Name,
             UserId = prod.UserId
         })
         .ToListAsync();
-        return allProd;
+        return (allProd);
     }
 
 
@@ -144,10 +139,10 @@ public class ProductService : IProductService
     }
 
     // Delete Product [Delete]
-    public async Task<bool> DeleteProductAsync(int ProdId)
+    public async Task<bool> DeleteProductAsync(int model)
     {
         // find by Id
-        var productEntity = await _dbContext.Products.FindAsync(ProdId);
+        var productEntity = await _dbContext.Products.FindAsync(model);
 
         // Validate existence and ownership
         if (productEntity?.UserId != _userId)

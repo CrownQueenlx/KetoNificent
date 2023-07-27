@@ -1,0 +1,57 @@
+@model KetoNificent.Models.Serving.ServingIndexVM
+@{
+    ViewData["Title"] = "Serving";
+}
+<a asp-controller="Serving" asp-action="Create" class="btn btn-sm btn-success">Create a Product</a>
+</div>
+<table class="table table-striped border">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name of Product</th>
+            <th>Measurement</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+                <tr>
+                    <td>@Model.Id</td>
+                    <td>@Model.ProductId</td> @* Contains the name of the Product *@
+                    <td>@Model.Measurement</td>
+                    <td>@Model.Amount</td>
+                </tr>
+            }
+    </tbody>
+</table>
+</div>
+@* @RenderSection{ KetoNificent.Models.Serving.ServingDetailVM} *@
+@{
+    ViewData["Title"] = "Serving";
+    var IngredientList = ViewData["Ingredients"] as List<SelectListItem>;
+        var ProductList = ViewData["Products"] as List<SelectListItem>;
+}
+<h2 class="display-4">Serving</h2>
+
+<form asp-action="Detail" method="Get" class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="ProductId" class="form-label"></label>
+        <select asp-for="ProductId" asp-items="ProductList" class="form-select">
+            <option selected hidden value="-1">-- Select Item --</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="IngredientId" class="form-label"></label>
+        <select asp-for="IngredientId" asp-items="IngredientList" class="form-select">
+            <option selected hidden value="-1">-- Select Item --</option>
+        </select>
+    </div>
+    <div>
+<display class="box">
+    <h2>Selections</h2>
+
+
+</display>
+    </div>
+</form>

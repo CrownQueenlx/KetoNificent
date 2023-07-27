@@ -25,13 +25,11 @@ public class IngredientController : Controller
         return View(ingredModel);
     }
     // Get Ingredient Details
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Detail(IngredientDetailVM model)
     {
-        var ingred = await _service.GetIngredientByIdAsync(id);
-        if (ingred == null)
-        {
-            return RedirectToAction(nameof(Index));
-        }
+        var ingred = await _service.GetIngredientDetailsAsync(model);
+    
+       
         return View(ingred);
     }
     // Get: Ingredient/Create

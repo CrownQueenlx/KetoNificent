@@ -29,18 +29,15 @@ public class ProductController : Controller
         return View(vm);
     }
     // Get product
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult?> Index(ProductEntity model)
     {
-         var name = await _service.GetAllProductsAsync();
-        var vm = new ProductIndexVM
-        {
-            NameList = new()
-        };
+        var name = await _service.GetAllProductsAsync(model);
+
         // need you model to be called from the service 
         // pass it to the view
         // in the service change the return type to viewModel *
         // after this the view should load
-        return View();
+        return View(name);
     }
     // Get product details
     public async Task<IActionResult> Details(int id)
@@ -71,9 +68,9 @@ public class ProductController : Controller
         await _service.CreateProductAsync(product);
         if (!ModelState.IsValid)
         {
-            return RedirectToAction(nameof(Index));
+            return View(nameof(Create));
         }
-        return View(product);
+        return RedirectToAction(nameof(Index));
     }
 
     // Get: Product/Edit

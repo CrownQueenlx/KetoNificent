@@ -13,17 +13,17 @@ public class IngredientService : IIngredientService
     {
         _dbContext = dbContext;
     }
-    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientCreateVM request)
+    public async Task<Data.Entities.IngredientEntity?> CreateIngredientAsync(IngredientCreateVM model)
     {
         var IngredEntity = new Data.Entities.IngredientEntity()
         {
-            Id = request.Id,
-            Name = request.Name,
-            NCarb = request.NCarb,
-            Fat = request.Fat,
-            Protein = request.Protein,
-            DefaultMeasurement = request.DefaultMeasurement,
-            DefaultAmount = request.DefaultAmount
+            Id = model.Id,
+            Name = model.Name,
+            NCarb = model.NCarb,
+            Fat = model.Fat,
+            Protein = model.Protein,
+            DefaultMeasurement = model.DefaultMeasurement,
+            DefaultAmount = model.DefaultAmount
         };
         _dbContext.Ingredients.Add(IngredEntity);
         var numberOfChanges = await _dbContext.SaveChangesAsync();
@@ -31,19 +31,21 @@ public class IngredientService : IIngredientService
         {
             Data.Entities.IngredientEntity response = new()
             {
-                Id = request.Id,
-                Name = request.Name,
-                NCarb = request.NCarb,
-                Fat = request.Fat,
-                Protein = request.Protein,
-                DefaultMeasurement = request.DefaultMeasurement,
-                DefaultAmount = request.DefaultAmount
+                Id = model.Id,
+                Name = model.Name,
+                NCarb = model.NCarb,
+                Fat = model.Fat,
+                Protein = model.Protein,
+                DefaultMeasurement = model.DefaultMeasurement,
+                DefaultAmount = model.DefaultAmount
             };
             return response;
         }
         return null;
 
     }
+
+    //Index is used as a brief overview here
     public async Task<List<IngredientIndexVM>> GetIngredientsAsync()
     {
         List<IngredientIndexVM> ingredModel = await _dbContext.Ingredients
@@ -59,14 +61,30 @@ public class IngredientService : IIngredientService
 
         return (ingredModel);
     }
+    public async Task<List<IngredientDetailVM>> GetIngredientDetailsAsync(IngredientDetailVM model)
+    {
+        List<IngredientDetailVM> ingredModel = await _dbContext.Ingredients
+               .Select(y => new IngredientDetailVM
+               {
+                   Id = model.Id,
+                   Name = model.Name,
+                   NCarb = model.NCarb,
+                   Fat = model.Fat,
+                   Protein = model.Protein,
+                   DefaultMeasurement = model.DefaultMeasurement,
+                   DefaultAmount = model.DefaultAmount
+               })
+                .ToListAsync();
 
-    public async Task<IngredientDetailVM?> GetIngredientByIdAsync(int ingredId)
+        return (ingredModel);
+    }
+    public async Task<IngredientDetailVM?> GetIngredientByIdAsync(int model)
     {
         // find the first Ingredient with the given Id
         var ingredientEntity = await _dbContext.Ingredients
-        .FirstOrDefaultAsync(y => y.Id == ingredId);
+        .FirstOrDefaultAsync(y => y.Id == model);
 
-        // If ingredId is null -> return null, otherwise 
+        // If model is null -> return null, otherwise 
         // initialize and return new
         return ingredientEntity is null ? null : new IngredientDetailVM
         {
@@ -80,21 +98,21 @@ public class IngredientService : IIngredientService
         };
     }
 
-    public async Task<bool> UpdateIngredientByIdAsync(IngredientEditVM request)
+    public async Task<bool> UpdateIngredientByIdAsync(IngredientEditVM model)
     {
         // find the first Ingredient by Id
-        var ingredEntity = await _dbContext.Ingredients.FindAsync(request.Id);
+        var ingredEntity = await _dbContext.Ingredients.FindAsync(model.Id);
         //    check if null
         if (ingredEntity is null)
             return false;
 
         // update entity's properties
-        ingredEntity.Name = request.Name;
-        ingredEntity.NCarb = request.NCarb;
-        ingredEntity.Fat = request.Fat;
-        ingredEntity.Protein = request.Protein;
-        ingredEntity.DefaultMeasurement = request.DefaultMeasurement;
-        ingredEntity.DefaultAmount = request.DefaultAmount;
+        ingredEntity.Name = model.Name;
+        ingredEntity.NCarb = model.NCarb;
+        ingredEntity.Fat = model.Fat;
+        ingredEntity.Protein = model.Protein;
+        ingredEntity.DefaultMeasurement = model.DefaultMeasurement;
+        ingredEntity.DefaultAmount = model.DefaultAmount;
 
         // save the changes to the database, capture the number of rows changed
         var numOfChanges = await _dbContext.SaveChangesAsync();
@@ -103,10 +121,10 @@ public class IngredientService : IIngredientService
         return numOfChanges == 1;
     }
 
-    public async Task<bool> DeleteIngredientByIdAsync(int ingredId)
+    public async Task<bool> DeleteIngredientByIdAsync(int model)
     {
         // find the Ingredient by the given Id
-        var ingredientEntity = await _dbContext.Ingredients.FindAsync(ingredId);
+        var ingredientEntity = await _dbContext.Ingredients.FindAsync(model);
 
         // validate that the Ingredient exists
         if (ingredientEntity == null)

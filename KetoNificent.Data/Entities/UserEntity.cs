@@ -10,8 +10,4 @@ public class UserEntity : IdentityUser<int>
     public string Name { get; set; } = string.Empty;
     public DateTime DateCreated { get; set; }
     public virtual ICollection<ProductEntity> ProductEntities { get; set; } = new List<ProductEntity>();
-   
-    // [ForeignKey(nameof(NormalizedUserName))]
-    // public virtual string NormalizedUN { get; set; }
-    //  string? IdentityUser<TKey>.NormalizedUserName { get; set; } = null!;
 }
