@@ -1,9 +1,7 @@
-using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Ingredient;
 using KetoNificent.Services.Ingredient;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Controllers;
 
@@ -24,24 +22,26 @@ public class IngredientController : Controller
         // show the list
         return View(ingredModel);
     }
+
     // Get Ingredient Details
     public async Task<IActionResult> Detail(IngredientDetailVM model)
     {
         var ingred = await _service.GetIngredientDetailsAsync(model);
-    
-       
         return View(ingred);
     }
+
     public async Task<IActionResult> Name(ServingEntity model)
     {
         var vm = await _service.GetIngredientNamesByServingAsync(model);
         return View(vm);
     }
+
     // Get: Ingredient/Create
     public IActionResult Create(int ingredId)
     {
         return View();
     }
+
     // Post: Ingredient/Create
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(IngredientCreateVM ingredient)
@@ -53,6 +53,7 @@ public class IngredientController : Controller
         await _service.CreateIngredientAsync(ingredient);
         return RedirectToAction(nameof(Index));
     }
+
     // Get: Ingredient/Edit
     public async Task<IActionResult> Update(int id)
     {
@@ -63,6 +64,7 @@ public class IngredientController : Controller
         }
         return View(model);
     }
+    
     [HttpPost]
     public async Task<IActionResult> Edit(IngredientEditVM ingredient)
     {

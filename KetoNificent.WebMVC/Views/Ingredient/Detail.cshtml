@@ -4,30 +4,29 @@
 }
 <a asp-asp-controller="Product" asp-action="Create" class="btn btn-sm btn-success">Create an Ingredient</a>
 <div>
-<table class="table table-striped border">
-    <thead>
-             <th>Name</th>
+    <table class="table table-striped border">
+        <thead>
+            <th>Name</th>
             <th>Name of Carbohydrate</th>
             <th>Carbohydrate Count</th>
             <th>Fat Count</th>
             <th>Protein Count</th>
             <th>Measurement</th>
             <th>Serving Size</th>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <td>@item.Name</td>
-            <td>@item.NCarb</td>
-            <td>@item.NCarbCt</td>
-            <td>@item.Fat</td>
-            <td>@item.Protein</td>
-            <td>@item.DefaultMeasurement</td>
-            <td>@item.DefaultAmount</td>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <td>@item.Name</td>
+                <td>@item.NCarb</td>
+                <td>@item.NCarbCt</td>
+                <td>@item.Fat</td>
+                <td>@item.Protein</td>
+                <td>@item.DefaultMeasurement</td>
+                <td>@item.DefaultAmount</td>
+            }
 
-    </tbody>
-    </div>
-
-</table>
+        </tbody>
+    </table>
+</div>
 </div>

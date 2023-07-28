@@ -11,6 +11,7 @@ public class AccountController : Controller
     {
         _userService = userService;
     }
+    
     // Get Action for Register -> Returns the view to the user
     public IActionResult Register()
     {
@@ -31,8 +32,8 @@ public class AccountController : Controller
         var registerResult = await _userService.RegisterUserAsync(model);
         if (registerResult != false)
         {
-             TempData["ErrorMsg"] = $"User cannot be registered as typed, please try again";
-            // TODO: Add error to page
+            //  Add error to page
+            TempData["ErrorMsg"] = $"User cannot be registered as typed, please try again";
             return RedirectToAction("Register", model);
         }
 
@@ -42,8 +43,7 @@ public class AccountController : Controller
             UserName = model.UserName,
             Password = model.Password
         };
-        
-        
+
         var regrResult = await _userService.LoginAsync(loginModel);
         return RedirectToAction("Index", "Home");
     }
@@ -61,7 +61,7 @@ public class AccountController : Controller
         var loginResult = await _userService.LoginAsync(model);
         if (loginResult == false)
         {
-            // TODO: Add inbalid password/username message
+            // TODO: Add invalid password/username message
             return View(model);
         }
         return RedirectToAction("Index", "Home");

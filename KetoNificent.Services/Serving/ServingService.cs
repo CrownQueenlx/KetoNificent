@@ -60,7 +60,6 @@ public class ServingService : IServingService
             IngredientId = serving.IngredientId,
             ProductId = serving.ProductId
         };
-        // return (serving);
     }
 
     // Update
@@ -80,7 +79,6 @@ public class ServingService : IServingService
         var numOfChanges = await _context.SaveChangesAsync();
         return numOfChanges == 1;
     }
-
 
     // Delete: by Id
     public async Task<bool> DeleteServingAsync(int servingId)

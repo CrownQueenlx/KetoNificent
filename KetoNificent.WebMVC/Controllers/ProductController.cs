@@ -1,11 +1,8 @@
-using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Product;
-using KetoNificent.Services.Ingredient;
 using KetoNificent.Services.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Controllers;
 
@@ -28,17 +25,17 @@ public class ProductController : Controller
         };
         return View(vm);
     }
+
     // Get product
     public async Task<IActionResult?> Index(ProductEntity model)
     {
+        // call the model from the service 
         var name = await _service.GetAllProductsAsync(model);
 
-        // need you model to be called from the service 
-        // pass it to the view
-        // in the service change the return type to viewModel *
-        // after this the view should load
+        //pass it to the view
         return View(name);
     }
+
     // Get product details
     public async Task<IActionResult> Details(int id)
     {
@@ -83,6 +80,7 @@ public class ProductController : Controller
         }
         return View();
     }
+    
     [HttpPost]
     public async Task<IActionResult> Edit(int id, ProductEditVM product)
     {

@@ -99,10 +99,6 @@ public partial class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, in
         });
 
         OnModelCreatingPartial(modelBuilder);
-
-        // modelBuilder.Entity<ProductEntity>()
-        // .HasOne(n => n.Id)
-        // .WithMany(p => p.Servings); 
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

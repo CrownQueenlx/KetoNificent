@@ -7,12 +7,15 @@ public interface IUserService
 {
     Task<bool> LoginAsync(UserLogin model);
     Task LogoutAsync();
+
     // Post
     Task<bool> RegisterUserAsync(UserRegister model);
+
     // Get methods are private in the UserService
     
     // Put
     Task<bool> UpdateUserByIdAsync(UserDetailVM request);
+    
     // Delete
     Task<bool> DeleteUserAsync(int id);
 }

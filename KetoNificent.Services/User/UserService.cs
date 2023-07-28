@@ -22,7 +22,6 @@ public class UserService : IUserService
         _signInManager = signInManager;
     }
 
-
     public async Task<bool> RegisterUserAsync(UserRegister model)
     {
         //check if user exists so they will not be registered twice
@@ -40,6 +39,7 @@ public class UserService : IUserService
         return createResult.Succeeded;
         //abbreviation for the await _context.saveChangesAsync section
     }
+
     public async Task<bool> LoginAsync(UserLogin model)
     {
         // verifies the user exists by the username
@@ -58,7 +58,7 @@ public class UserService : IUserService
 
         // finally, since user exists and password passes verification, sign in the user
         await _signInManager.SignInAsync(userEntity, true);
-            return true;
+        return true;
     }
 
     public async Task LogoutAsync() => await _signInManager.SignOutAsync();

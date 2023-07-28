@@ -1,9 +1,4 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using KetoNificent.Data;
 using KetoNificent.Data.Entities;
 using KetoNificent.Models.Product;
 using System.ComponentModel.DataAnnotations;
@@ -46,7 +41,6 @@ public class ProductService : IProductService
             };
             return response;
         }
-
         return null;
     }
 
@@ -104,7 +98,8 @@ public class ProductService : IProductService
             Name = productEntity.Name
         };
     }
-    //ProductService Get tolist
+
+    //ProductService Get to-list
     public async Task<List<ProductEntity>> GetProductDisplayAsync(int model)
     {
         // If model is null -> return null
@@ -152,5 +147,4 @@ public class ProductService : IProductService
         _dbContext.Products.Remove(productEntity);
         return await _dbContext.SaveChangesAsync() == 1;
     }
-
 }

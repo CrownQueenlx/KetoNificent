@@ -2,7 +2,6 @@ using KetoNificent.Data.Entities;
 using KetoNificent.Models.Serving;
 using KetoNificent.Services.Serving;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace KetoNificent.Controllers;
 
@@ -14,16 +13,12 @@ public class ServingController : Controller
         _service = service;
     }
 
+    // Get Serving
     [HttpGet]
     public async Task<IActionResult> Index(int id)
     {
         var model = await _service.GetServingByIdAsync(id);
         return View(model);
-    }
-    // Get Serving
-    public IActionResult Index()
-    {
-        return View();
     }
 
     // Get Serving details
@@ -42,6 +37,7 @@ public class ServingController : Controller
 
         return View();
     }
+    
     // Get: Serving/Create
     public IActionResult Create(int servingId)
     {

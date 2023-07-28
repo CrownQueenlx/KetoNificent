@@ -154,7 +154,6 @@ public class IngredientService : IIngredientService
         if (ingredientEntity == null)
             return false;
 
-
         // remove the ingredient from the dbcontext and assert that one change was saved
         _dbContext.Ingredients.Remove(ingredientEntity);
         return false;
