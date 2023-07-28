@@ -6,7 +6,7 @@
 <h1>@ViewData["Title"]</h1>
 <a asp-controller-action="~Views/Product" asp-action="Create" class="btn btn-sm btn-success">Create an Ingredient</a>
 </div>
-<table class="table table-striped border">
+<table class="table table-striped border ">
     <thead>
         <tr>
             <th>Name</th>
@@ -14,15 +14,16 @@
             <th>Carbohydrate Count</th>
         </tr>
     </thead>
+    <span>
     <tbody>
-            <tr>
         @foreach (var ingredient in Model)
         {
+            <tr>
                 <td>@ingredient.Name</td>
                 <td>@ingredient.NCarb</td>
                 <td>@ingredient.NCarbCt</td>
-        }
          </tr>
+        }
     </tbody>
 </table>
 </div>

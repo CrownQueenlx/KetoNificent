@@ -19,11 +19,7 @@
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <span></span>
-    <a><input type="submit" value="Create" class="btn btn-primary btn-sm"></a>
+    <a class="text-center"><input type="submit" value="Create" class="btn btn-primary btn-sm"></a>
 </form>
-<div asp-action="Detail" method="Get" class="box row g-3">
-     @Html.RenderPartialAsync("~/views/Ingredient/Detail.cshtml");
-
-public string DefaultMeasurement { get; set; } = string.Empty;
-public int? DefaultAmount { get; set; }
+@* Bring in Measurement and Amount of ingredient/s used here *@
 </div>

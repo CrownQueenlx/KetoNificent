@@ -20,6 +20,7 @@ public class IngredientService : IIngredientService
             Id = model.Id,
             Name = model.Name,
             NCarb = model.NCarb,
+            NCarbCt = model.NCarbCt,
             Fat = model.Fat,
             Protein = model.Protein,
             DefaultMeasurement = model.DefaultMeasurement,
@@ -34,6 +35,7 @@ public class IngredientService : IIngredientService
                 Id = model.Id,
                 Name = model.Name,
                 NCarb = model.NCarb,
+                NCarbCt = model.NCarbCt,
                 Fat = model.Fat,
                 Protein = model.Protein,
                 DefaultMeasurement = model.DefaultMeasurement,
@@ -88,6 +90,7 @@ public class IngredientService : IIngredientService
                    Id = model.Id,
                    Name = model.Name,
                    NCarb = model.NCarb,
+                   NCarbCt = model.NCarbCt,
                    Fat = model.Fat,
                    Protein = model.Protein,
                    DefaultMeasurement = model.DefaultMeasurement,
@@ -110,6 +113,7 @@ public class IngredientService : IIngredientService
             Id = ingredientEntity.Id,
             Name = ingredientEntity.Name,
             NCarb = ingredientEntity.NCarb,
+            NCarbCt = ingredientEntity.NCarbCt,
             Fat = ingredientEntity.Fat,
             Protein = ingredientEntity.Protein,
             DefaultMeasurement = ingredientEntity.DefaultMeasurement,
@@ -128,6 +132,7 @@ public class IngredientService : IIngredientService
         // update entity's properties
         ingredEntity.Name = model.Name;
         ingredEntity.NCarb = model.NCarb;
+        ingredEntity.NCarbCt = model.NCarbCt;
         ingredEntity.Fat = model.Fat;
         ingredEntity.Protein = model.Protein;
         ingredEntity.DefaultMeasurement = model.DefaultMeasurement;
